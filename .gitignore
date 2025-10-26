@@ -1,0 +1,9 @@
+/.idea
+/*/logs/
+
+# Backend
+/backend/.g8/
+/backend/target/
+/backend/project/target/
+/backend/dist/
+
