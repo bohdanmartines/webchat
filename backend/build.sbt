@@ -9,6 +9,7 @@ scalaVersion := "2.13.17"
 
 libraryDependencies ++= Seq(
   guice,
+  jdbc,
   "org.playframework" %% "play-slick" % "6.2.0",
   "org.playframework" %% "play-slick-evolutions" % "6.2.0"
 )
