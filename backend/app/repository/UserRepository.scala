@@ -17,7 +17,8 @@ class UserRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   private val users = TableQuery[UserTable]
 
   def create(user: User): Future[User] = {
-    db.run(users += user).map(_ => user)
+    val insert = (users returning users.map(_.id) into ((u, id) => u.copy(id = id))) += user
+    db.run(insert)
   }
 
   def findById(id: Long): Future[Option[User]] = {
