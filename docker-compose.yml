@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: webchat_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: webchat
+      MYSQL_USER: webchat
+      MYSQL_PASSWORD: webchatpwd
+      MYSQL_ROOT_PASSWORD: rootpwd
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+volumes:
+  mysql-data:
