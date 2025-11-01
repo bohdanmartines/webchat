@@ -1,10 +1,11 @@
-/.idea
+**/.idea
 /*/logs/
 
 # Backend
+/backend/.bsp/
 /backend/.g8/
-/backend/target/
 /backend/project/target/
 /backend/project/project/target/
 /backend/dist/
+/backend/target/
 
