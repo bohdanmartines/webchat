@@ -5,19 +5,22 @@ import play.api.mvc._
 import services.RegistrationService
 
 import javax.inject._
-import scala.concurrent.Future
-
+import scala.concurrent.{ExecutionContext, Future}
 import dto.{UserCreate, UserResponse}
 
 @Singleton
 class AuthController @Inject()(val controllerComponents: ControllerComponents,
-                               reqistrationService: RegistrationService) extends BaseController {
+                               reqistrationService: RegistrationService)
+                              (implicit ec: ExecutionContext) extends BaseController {
 
   def register() = Action.async(parse.json) { request =>
     val userCreate = request.body.validate[UserCreate]
     userCreate.fold(
       errors => Future.successful(BadRequest(errors.toString)),
-      user => Future.successful(Created(Json.toJson(UserResponse(1, user.username, user.name))))
+      user => reqistrationService.register(user).map {
+        case Left(err) => Conflict(Json.obj("error" -> err))
+        case Right(userResp) => Created(Json.toJson(userResp))
+      }
     )
   }
 

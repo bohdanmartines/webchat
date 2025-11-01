@@ -1,15 +1,14 @@
 package services
 
 import dto.{UserCreate, UserResponse}
-import models.User
 
 import javax.inject.Singleton
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.Future
 
 @Singleton
 class RegistrationService {
 
-  def register(user: UserCreate): User = {
-    User(id = 1, username = user.username, passwordHash = "<PASSWORD>", name = "MOCK USER")
+  def register(user: UserCreate): Future[Either[String, UserResponse]] = {
+    Future.successful(Right(UserResponse(id = 1, username = user.username, name = "MOCK USER from Service")))
   }
 }
