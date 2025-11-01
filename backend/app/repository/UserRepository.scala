@@ -8,12 +8,17 @@ import javax.inject._
 import scala.concurrent.Future
 
 @Singleton
-class UserRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) {
+class UserRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
+                              (implicit ec: scala.concurrent.ExecutionContext) {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   import dbConfig._
   import profile.api._
 
   private val users = TableQuery[UserTable]
+
+  def create(user: User): Future[User] = {
+    db.run(users += user).map(_ => user)
+  }
 
   def findById(id: Long): Future[Option[User]] = {
     db.run(users.filter(_.id === id).result.headOption)
