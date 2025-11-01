@@ -2,11 +2,12 @@ package controller
 
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.RegistrationService
 
 import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
+
 import dto.{UserCreate, UserResponse}
+import service.RegistrationService
 
 @Singleton
 class AuthController @Inject()(val controllerComponents: ControllerComponents,
