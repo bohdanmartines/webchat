@@ -9,7 +9,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuthService @Inject()(repository: UserRepository)(implicit ec: ExecutionContext) {
+class AuthService @Inject()(repository: UserRepository, jwtService: JwtService)
+                           (implicit ec: ExecutionContext) {
 
   def register(userCreate: UserCreate): Future[Either[String, UserResponse]] = {
     repository.findByUsername(userCreate.username).flatMap {
@@ -28,7 +29,7 @@ class AuthService @Inject()(repository: UserRepository)(implicit ec: ExecutionCo
     println(s"Login request for: [${request.username}]")
     repository.findByUsername(request.username).flatMap {
       case Some(user) if BCrypt.checkpw(request.password, user.passwordHash) =>
-          Future.successful(Right(s"MOCK secret"))
+          Future.successful(Right(jwtService.createToken(user.id)))
       case _ => Future.successful(Left("Invalid credentials"))
     }
   }

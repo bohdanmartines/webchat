@@ -13,4 +13,5 @@ libraryDependencies ++= Seq(
   "org.playframework" %% "play-slick-evolutions" % "6.2.0",
   "com.mysql" % "mysql-connector-j" % "8.4.0",
   "org.mindrot" % "jbcrypt" % "0.4",
+  "com.github.jwt-scala" %% "jwt-play" % "11.0.3"
 )
