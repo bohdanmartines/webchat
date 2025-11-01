@@ -1,4 +1,4 @@
 # Auth endpoints
-POST        /api/auth/register        controllers.AuthController.register()
-POST        /api/auth/login           controllers.AuthController.login()
-GET         /api/auth/me              controllers.AuthController.me()
+POST        /api/auth/register        controller.AuthController.register()
+POST        /api/auth/login           controller.AuthController.login()
+GET         /api/auth/me              controller.AuthController.me()
