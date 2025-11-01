@@ -3,9 +3,13 @@ package controllers
 import play.api.mvc._
 import javax.inject._
 
-class AuthController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+import services.RegistrationService
 
-  def register() = Action {
+@Singleton
+class AuthController @Inject()(val controllerComponents: ControllerComponents,
+                               reqistrationService: RegistrationService) extends BaseController {
+
+  def register() = Action { request =>
     Ok("Registration: Implement me!")
   }
 
