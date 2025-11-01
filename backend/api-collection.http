@@ -1,0 +1,23 @@
+@baseUrl = http://localhost:9000
+
+### Register user
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "john",
+  "password": "secret123"
+}
+
+### Login user
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "john",
+  "password": "secret123"
+}
+
+### Get current user info
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer abc

@@ -4,4 +4,9 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index()
+GET         /                         controllers.HomeController.index()
+
+# Auth endpoints
+POST        /api/auth/register        controllers.AuthController.register()
+POST        /api/auth/login           controllers.AuthController.login()
+GET         /api/auth/me              controllers.AuthController.me()
