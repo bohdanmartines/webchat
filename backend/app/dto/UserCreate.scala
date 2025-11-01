@@ -1,6 +1,6 @@
-package models
+package dto
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json._
 
 case class UserCreate(email: String, password: String, name: String)
 
