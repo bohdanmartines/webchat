@@ -9,18 +9,21 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Success
 
 @Singleton
-class RegistrationService @Inject()(repository: UserRepository)(implicit ec: ExecutionContext){
+class RegistrationService @Inject()(repository: UserRepository)(implicit ec: ExecutionContext) {
 
   def register(userCreate: UserCreate): Future[Either[String, UserResponse]] = {
-    repository.findByUsername(userCreate.username).onComplete {
-      case Success(userOption) => userOption match {
-        case Some(user) => println(s"User already exists: $user")
-        case _ => println(s"User not found by username [${userCreate.username}]")
+    repository.findByUsername(userCreate.username).map(userOption => {
+      userOption match {
+        case Some(existing) => Left(s"Username [${existing.username}] already exists: ")
+        case None => {
+          println(s"About to create user: $userCreate")
+          val user = User(username = userCreate.username, passwordHash = "<PASSWORD>", name = userCreate.name) // TODO hash the password
+          val eventualUser = repository.create(user)
+          eventualUser.map {
+            createdUser => Right(UserResponse(createdUser.id, createdUser.username, createdUser.name))
+          }
+        }
       }
-    }
-    val user = User(username = userCreate.username, passwordHash = "<PASSWORD>", name = userCreate.name)  // TODO hash the password
-    repository.create(user).map {
-      createdUser => Right(UserResponse(createdUser.id, createdUser.username, createdUser.name))
-    }
+    })
   }
 }
