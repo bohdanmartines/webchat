@@ -1,6 +1,6 @@
 package service
 
-import dto.{UserCreate, UserResponse}
+import dto.{Login, UserCreate, UserResponse}
 import model.User
 import org.mindrot.jbcrypt.BCrypt
 import repository.UserRepository
@@ -9,7 +9,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RegistrationService @Inject()(repository: UserRepository)(implicit ec: ExecutionContext) {
+class AuthService @Inject()(repository: UserRepository)(implicit ec: ExecutionContext) {
 
   def register(userCreate: UserCreate): Future[Either[String, UserResponse]] = {
     repository.findByUsername(userCreate.username).flatMap {
@@ -21,6 +21,15 @@ class RegistrationService @Inject()(repository: UserRepository)(implicit ec: Exe
         repository.create(user).map {
           createdUser => Right(UserResponse(createdUser.id, createdUser.username, createdUser.name))
         }
+    }
+  }
+
+  def login(request: Login): Future[Either[String, String]] = {
+    println(s"Login request for: [${request.username}]")
+    repository.findByUsername(request.username).flatMap {
+      case Some(user) if BCrypt.checkpw(request.password, user.passwordHash) =>
+          Future.successful(Right(s"MOCK secret"))
+      case _ => Future.successful(Left("Invalid credentials"))
     }
   }
 }
