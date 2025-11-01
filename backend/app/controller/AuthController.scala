@@ -1,4 +1,4 @@
-package controllers
+package controller
 
 import play.api.libs.json.Json
 import play.api.mvc._
