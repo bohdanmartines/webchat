@@ -1,6 +1,7 @@
 package services
 
-import models.{User, UserCreate}
+import dto.UserCreate
+import models.User
 
 import javax.inject.Singleton
 
