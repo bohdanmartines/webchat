@@ -19,4 +19,8 @@ class UserRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     db.run(users.filter(_.id === id).result.headOption)
   }
 
+  def findByUsername(username: String): Future[Option[User]] = {
+    db.run(users.filter(_.username === username).result.headOption)
+  }
+
 }
