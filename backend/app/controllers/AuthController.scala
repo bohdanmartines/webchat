@@ -16,7 +16,7 @@ class AuthController @Inject()(val controllerComponents: ControllerComponents,
   def register() = Action.async(parse.json) { request =>
     val userCreate = request.body.validate[UserCreate]
     userCreate.fold(
-      errors => Future.successful(BadRequest(s"Invalid user registration request $errors")),
+      errors => Future.successful(BadRequest(errors.toString)),
       user => Future.successful(Created(Json.toJson(UserResponse(1, user.username, user.name))))
     )
   }
