@@ -5,12 +5,14 @@ import play.api.mvc._
 
 import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
-import dto.{Login, UserCreate, UserResponse}
-import service.AuthService
+import dto.{Login, UserCreate}
+import service.{AuthService, UserService}
 
 @Singleton
 class AuthController @Inject()(val controllerComponents: ControllerComponents,
-                               authService: AuthService)
+                               authService: AuthService,
+                               userService: UserService,
+                               securedActionFactory: SecuredAction)
                               (implicit ec: ExecutionContext) extends BaseController {
 
   def register() = Action.async(parse.json) { request =>
@@ -35,7 +37,10 @@ class AuthController @Inject()(val controllerComponents: ControllerComponents,
     )
   }
 
-  def me() = Action {
-    Ok("About me: Implement me!")
+  def me() = securedActionFactory.async { request =>
+    userService.getUser(request.userId).map {
+      case Some(userResp) => Ok(Json.toJson(userResp))
+      case None => NotFound(Json.obj("error" -> "User not found"))
+    }
   }
 }

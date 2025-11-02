@@ -20,4 +20,9 @@ class JwtService @Inject()(config: play.api.Configuration) {
     )
     Jwt.encode(claim, secret, algo)
   }
+
+  def validateToken(token: String): Option[Long] = {
+    val triedClaim = Jwt.decode(token, secret, Seq(algo)).toOption
+    triedClaim.flatMap(_.subject).map(_.toLong)
+  }
 }
