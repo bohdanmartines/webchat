@@ -7,3 +7,7 @@
 ## [v0.0.2] – Login API
 - Added user credentials verification on login
 - Introduced JWT generation on login
+
+## [v0.1.0] – Endpoint protection
+- Implemented access token verification for protected endpoints
+- Add a protected endpoint for retrieving user information
