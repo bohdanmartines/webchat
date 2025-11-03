@@ -8,13 +8,24 @@ function Register() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      console.log('register called')
+    } catch (err: any) {
+      setError(err?.response?.data?.message || err.message || 'Register failed')
+    } finally { setLoading(false) }
+  }
+
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="w-full max-w-md bg-white p-8 rounded shadow">
 
         <h2 className="text-2xl mb-6">Create account</h2>
 
-        <form className="space-y-4">
+        <form  onSubmit={submit} className="space-y-4">
           <div>
             <label className="block text-sm">Username</label>
             <input value={username} onChange={e => setUsername(e.target.value)}
