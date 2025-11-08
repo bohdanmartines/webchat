@@ -15,7 +15,7 @@ function Register() {
     setError(null)
     try {
       console.log('register called')
-      await authApi.signUp(username, password)
+      await authApi.signUp(username, password, "testName")
       console.log('register completed')
     } catch (err: any) {
       setError(err?.response?.data?.message || err.message || 'Register failed')
