@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import * as authApi from '../api/auth'
 
 function Register() {
@@ -9,6 +9,8 @@ function Register() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const navigate = useNavigate()
+
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
@@ -17,6 +19,7 @@ function Register() {
       console.log('register called')
       await authApi.signUp(username, password, "testName")
       console.log('register completed')
+      navigate('/')
     } catch (err: any) {
       setError(err?.response?.data?.message || err.message || 'Register failed')
     } finally { setLoading(false) }
