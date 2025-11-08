@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {Link} from "react-router-dom";
+import * as authApi from '../api/auth'
 
 function Register() {
 
@@ -14,6 +15,8 @@ function Register() {
     setError(null)
     try {
       console.log('register called')
+      await authApi.signUp(username, password)
+      console.log('register completed')
     } catch (err: any) {
       setError(err?.response?.data?.message || err.message || 'Register failed')
     } finally { setLoading(false) }
@@ -25,7 +28,7 @@ function Register() {
 
         <h2 className="text-2xl mb-6">Create account</h2>
 
-        <form  onSubmit={submit} className="space-y-4">
+        <form onSubmit={submit} className="space-y-4">
           <div>
             <label className="block text-sm">Username</label>
             <input value={username} onChange={e => setUsername(e.target.value)}
