@@ -17,7 +17,7 @@ function Register() {
     setError(null)
     try {
       console.log('register called')
-      await authApi.signUp(username, password, "testName")
+      await authApi.signUp(username, password)
       console.log('register completed')
       navigate('/')
     } catch (err: any) {

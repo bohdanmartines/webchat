@@ -13,7 +13,7 @@ class UserService @Inject()(repository: UserRepository)
 
   def getUser(userId: Long): Future[Option[UserResponse]] = {
     repository.findById(userId).map(
-      optionUser => optionUser.map(user => UserResponse(user.id, user.username, user.name))
+      optionUser => optionUser.map(user => UserResponse(user.id, user.username))
     )
   }
 }

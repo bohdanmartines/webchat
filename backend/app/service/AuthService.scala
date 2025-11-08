@@ -18,9 +18,9 @@ class AuthService @Inject()(repository: UserRepository, jwtService: JwtService)
       case None =>
         println(s"About to create user: [${userCreate.username}]")
         val hash = BCrypt.hashpw(userCreate.password, BCrypt.gensalt())
-        val user = User(username = userCreate.username, passwordHash = hash, name = userCreate.name)
+        val user = User(username = userCreate.username, passwordHash = hash)
         repository.create(user).map {
-          createdUser => Right(UserResponse(createdUser.id, createdUser.username, createdUser.name))
+          createdUser => Right(UserResponse(createdUser.id, createdUser.username))
         }
     }
   }
