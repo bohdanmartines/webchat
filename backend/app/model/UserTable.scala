@@ -7,7 +7,6 @@ class UserTable (tag: Tag) extends Table[User](tag, "users"){
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def username = column[String]("username")
   def passwordHash = column[String]("password_hash")
-  def name = column[String]("name")
 
-  override def * : ProvenShape[User] = (id, username, passwordHash, name) <> (User.tupled, User.unapply)
+  override def * : ProvenShape[User] = (id, username, passwordHash) <> (User.tupled, User.unapply)
 }
