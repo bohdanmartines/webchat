@@ -21,7 +21,11 @@ function Register() {
       await auth.signIn(username, password)
       navigate('/')
     } catch (err: any) {
-      setError(err?.response?.data?.message || err.message || 'Register failed')
+      if (err.response?.status === 409) {
+        setError('Username already taken')
+      } else {
+        setError(err?.response?.data?.message || err.message || 'Register failed')
+      }
     } finally {
       setLoading(false)
     }
