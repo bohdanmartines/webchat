@@ -22,14 +22,16 @@ function Register() {
       navigate('/')
     } catch (err: any) {
       setError(err?.response?.data?.message || err.message || 'Register failed')
-    } finally { setLoading(false) }
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="w-full max-w-md bg-white p-8 rounded shadow">
 
-        <h2 className="text-2xl mb-6">Create account</h2>
+        <h2 className="text-2xl mb-6">Sign up</h2>
 
         <form onSubmit={submit} className="space-y-4">
           <div>
@@ -45,7 +47,7 @@ function Register() {
           {error && <div className="text-red-600">{error}</div>}
           <div>
             <button className="w-full py-2 rounded bg-indigo-600 text-white" disabled={loading}>
-              {loading ? 'Creating...' : 'Create account'}
+              {loading ? 'Signing up...' : 'Sign up'}
             </button>
           </div>
         </form>
