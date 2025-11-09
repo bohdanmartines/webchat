@@ -4,8 +4,13 @@ import {Navigate, Route, Routes} from "react-router-dom";
 import Register from './pages/Register'
 import Login from "./pages/Login.tsx";
 import Home from "./pages/Home.tsx";
+import {useAuth} from "./api/AuthContext.tsx";
 
 function ProtectedPage({children}: { children: JSX.Element }) {
+  const auth = useAuth()
+  if (!auth.token) {
+    return <Navigate to="/login" replace/>;
+  }
   return children;
 }
 

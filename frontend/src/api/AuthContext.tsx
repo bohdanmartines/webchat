@@ -12,8 +12,8 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({children}: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>('MOCK_TOKEN')
-  const [user, setUser] = useState<string | null>(() => 'MOCK_USERNAME')
+  const [token, setToken] = useState<string | null>(null)
+  const [user, setUser] = useState<string | null>(null)
 
   async function signUp(username: string, password: string) {
     return await authApi.signUp(username, password)
