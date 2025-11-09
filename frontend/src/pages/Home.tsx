@@ -1,6 +1,10 @@
+import Navbar from "./Navbar.tsx";
+
 function Home() {
   return(
-    <h1>Home</h1>
+    <>
+      <Navbar />
+    </>
   )
 }
 
