@@ -4,22 +4,30 @@ import * as authApi from '../api/auth'
 
 type AuthContextType = {
   token: string | null
-  username: string | null
+  user: string | null
   signUp: (username: string, password: string) => Promise<any>
+  signIn: (username: string, password: string) => Promise<any>
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({children}: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => 'MOCK_TOKEN')
-  const [username, setUsername] = useState<string | null>(() => 'MOCK_USERNAME')
+  const [token, setToken] = useState<string | null>('MOCK_TOKEN')
+  const [user, setUser] = useState<string | null>(() => 'MOCK_USERNAME')
 
   async function signUp(username: string, password: string) {
     return await authApi.signUp(username, password)
   }
 
+  async function signIn(username: string, password: string) {
+    let response = await authApi.signIn(username, password);
+    setToken(response.token)
+    setUser(username)
+    return response
+  }
+
   return (
-    <AuthContext value={{token, username, signUp}}>
+    <AuthContext value={{token, user, signUp, signIn}}>
       {children}
     </AuthContext>
   )

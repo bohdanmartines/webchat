@@ -17,9 +17,8 @@ function Register() {
     setLoading(true)
     setError(null)
     try {
-      console.log('register called')
       await auth.signUp(username, password)
-      console.log('register completed')
+      await auth.signIn(username, password)
       navigate('/')
     } catch (err: any) {
       setError(err?.response?.data?.message || err.message || 'Register failed')
