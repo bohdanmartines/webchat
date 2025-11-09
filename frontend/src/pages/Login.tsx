@@ -19,7 +19,11 @@ function Login() {
       await auth.signIn(username, password)
       navigate('/')
     } catch (err: any) {
-      setError(err?.response?.data?.message || err.message || 'Login failed')
+      if (err.response?.status === 401) {
+        setError('Invalid credentials')
+      } else {
+        setError(err?.response?.data?.message || err.message || 'Login failed')
+      }
     } finally {
       setLoading(false)
     }
