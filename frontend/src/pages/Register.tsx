@@ -32,33 +32,62 @@ function Register() {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Register</h1>
 
-        <h2 className="text-2xl mb-6">Sign up</h2>
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
+            {error}
+          </div>
+        )}
 
-        <form onSubmit={submit} className="space-y-4">
-          <div>
-            <label className="block text-sm">Username</label>
-            <input value={username} onChange={e => setUsername(e.target.value)}
-                   className="w-full border p-2 rounded" placeholder="your username" />
+        <form onSubmit={submit}>
+          <div className="mb-6">
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              disabled={loading}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+            />
           </div>
-          <div>
-            <label className="block text-sm">Password</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-                   className="w-full border p-2 rounded" placeholder="password" />
+
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={loading}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+            />
           </div>
-          {error && <div className="text-red-600">{error}</div>}
-          <div>
-            <button className="w-full py-2 rounded bg-indigo-600 text-white" disabled={loading}>
-              {loading ? 'Signing up...' : 'Sign up'}
-            </button>
-          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          >
+            {loading ? 'Registering...' : 'Register'}
+          </button>
         </form>
 
-        <p className="mt-4 text-sm">
-          Already have an account? <Link to="/login" className="text-indigo-600">Sign in</Link>
-        </p>
+        <div className="mt-6 text-center text-sm text-gray-600">
+          Already have an account?{' '}
+          <Link to="/login" className="text-blue-600 hover:text-blue-800 font-medium">
+            Login
+          </Link>
+        </div>
       </div>
     </div>
   )
