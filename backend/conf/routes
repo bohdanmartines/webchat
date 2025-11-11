@@ -2,3 +2,7 @@
 POST        /api/auth/register        controller.AuthController.register()
 POST        /api/auth/login           controller.AuthController.login()
 GET         /api/auth/me              controller.AuthController.me()
+
+# Chat endpoints
+POST        /api/chat                 controller.ChatController.createChat()
+GET         /api/chat                 controller.ChatController.getChats()

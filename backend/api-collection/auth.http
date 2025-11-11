@@ -20,4 +20,4 @@ Content-Type: application/json
 
 ### Get current user info
 GET {{baseUrl}}/api/auth/me
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMyIsImV4cCI6MTc2MjA3OTI3NSwiaWF0IjoxNzYyMDc1Njc1fQ.F9T_ls_PizEB4PCPhySE-EQRY-Hm7JrgR8VLA5a4-4Y
+Authorization: Bearer place_token_here

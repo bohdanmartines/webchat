@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:9000
+
+### Create chat
+POST {{baseUrl}}/api/chat
+Content-Type: application/json
+Authorization: Bearer place_token_here
+
+{
+  "name": "Test Chat 1"
+}
+
+### Get chats for the current user
+GET {{baseUrl}}/api/chat
+Authorization: Bearer place_token_here
