@@ -11,3 +11,7 @@
 ## [v0.1.0] – Endpoint protection
 - Implemented access token verification for protected endpoints
 - Add a protected endpoint for retrieving user information
+
+## [v0.1.1] – Endpoint protection
+- Removed name field from the user entity
+
