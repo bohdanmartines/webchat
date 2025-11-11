@@ -12,6 +12,6 @@
 - Implemented access token verification for protected endpoints
 - Add a protected endpoint for retrieving user information
 
-## [v0.1.1] – Endpoint protection
+## [v0.1.1] – Small improvement to Login API
 - Removed name field from the user entity
 
