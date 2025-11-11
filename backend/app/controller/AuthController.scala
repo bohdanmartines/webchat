@@ -31,7 +31,7 @@ class AuthController @Inject()(val controllerComponents: ControllerComponents,
     loginRequest.fold(
       errors => Future.successful(BadRequest(errors.toString)),
       loginObject => authService.login(loginObject).map {
-        case Left(err) => Forbidden(Json.obj("error" -> err))
+        case Left(err) => Unauthorized(Json.obj("error" -> err))
         case Right(t) => Ok(Json.obj("token" -> t))
       }
     )

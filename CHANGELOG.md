@@ -15,3 +15,7 @@
 ## [v0.1.1] – Small improvement to Login API
 - Removed name field from the user entity
 
+## [v0.2.0] – Registration and Login UI
+- Added frontend subproject
+- Implemented Registration and Login pages
+- Integrated Registration and Login pages with the API
