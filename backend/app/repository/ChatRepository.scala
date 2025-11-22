@@ -36,8 +36,22 @@ class ChatRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     val query = chatParticipants.filter(_.userId === userId)
       .join(chats).on(_.chatId === _.id)
       .map(_._2)
-    db.run(query.result).map(chats =>
+
+    db.run(query.result).map { chats =>
+      println(s"Found chats: $chats")
+
+      val chatIds = chats.map(_.id)
+      val participantsQuery = chatParticipants.filter(_.chatId inSet chatIds)
+        .groupBy(_.chatId)
+        .map{ case (chatId, participants) => (chatId, participants.length)}
+
+      val participants = db.run(participantsQuery.result)
+        .map{counts =>
+          val countMap = counts.toMap
+          println(s"Found participants: $countMap")
+        }
+
       chats.map(chat => ChatWithParticipants(chat.id, chat.name, chat.creator, Seq.empty))
-    )
+    }
   }
 }
