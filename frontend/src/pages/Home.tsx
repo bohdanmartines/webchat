@@ -3,6 +3,7 @@ import Navbar from "./Navbar.tsx";
 import * as chatApi from '../api/chat'
 import ChatList from "./ChatList.tsx";
 import {useAuth} from "../api/AuthContext.tsx";
+import '../css/HomePage.css';
 
 function Home() {
 
