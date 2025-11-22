@@ -12,8 +12,9 @@ class ChatTable(tag: Tag) extends Table[Chat](tag, "chats"){
 }
 
 class ChatParticipantsTable(tag: Tag) extends Table[ChatParticipant](tag, "chat_participants") {
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def chatId = column[Long]("chat_id")
   def userId = column[Long]("user_id")
 
-  def * = (chatId, userId) <> ((ChatParticipant.apply _).tupled, ChatParticipant.unapply)
+  def * = (id, chatId, userId) <> ((ChatParticipant.apply _).tupled, ChatParticipant.unapply)
 }
