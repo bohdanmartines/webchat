@@ -1,6 +1,6 @@
 package repository
 
-import model.{Chat, ChatParticipant, ChatParticipantsTable, ChatTable, ChatWithParticipants}
+import model.{Chat, ChatParticipant, ChatParticipantsTable, ChatTable, ChatWithParticipantCount, ChatWithParticipants}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -32,26 +32,22 @@ class ChatRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     db.run(chats.filter(_.id === id).result.headOption)
   }
 
-  def findByUser(userId: Long): Future[Seq[ChatWithParticipants]] = {
-    val query = chatParticipants.filter(_.userId === userId)
+  def findByUser(userId: Long): Future[Seq[ChatWithParticipantCount]] = {
+    val query = chatParticipants.filter(_.userId === userId)  // First, find chats with the user
       .join(chats).on(_.chatId === _.id)
       .map(_._2)
 
-    db.run(query.result).map { chats =>
-      println(s"Found chats: $chats")
-
+    db.run(query.result).flatMap { chats =>
       val chatIds = chats.map(_.id)
-      val participantsQuery = chatParticipants.filter(_.chatId inSet chatIds)
+      val participantsQuery = chatParticipants.filter(_.chatId inSet chatIds) // Then, find participant count for each chat
         .groupBy(_.chatId)
-        .map{ case (chatId, participants) => (chatId, participants.length)}
+        .map { case (chatId, participants) => (chatId, participants.length) }
 
-      val participants = db.run(participantsQuery.result)
-        .map{counts =>
+      db.run(participantsQuery.result)
+        .map { counts =>
           val countMap = counts.toMap
-          println(s"Found participants: $countMap")
+          chats.map(chat => ChatWithParticipantCount(chat.id, chat.name, chat.creator, countMap.getOrElse(chat.id, 0)))
         }
-
-      chats.map(chat => ChatWithParticipants(chat.id, chat.name, chat.creator, Seq.empty))
     }
   }
 }
