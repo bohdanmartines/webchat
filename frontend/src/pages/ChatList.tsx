@@ -22,6 +22,11 @@ function ChatList({ chats, onChatClick }) {
         <div className="chat-info">
           <div className="chat-name">{chat.name}</div>
         </div>
+        <div className="chat-meta">
+          <span className="participant-count">
+                {' • '}{chat.participantCount} participant{chat.participantCount !== 1 ? 's' : ''}
+              </span>
+        </div>
       </div>
     ))}
   </div>)
