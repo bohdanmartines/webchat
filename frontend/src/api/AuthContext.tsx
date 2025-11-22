@@ -7,7 +7,7 @@ type AuthContextType = {
   user: string | null
   signUp: (username: string, password: string) => Promise<any>
   signIn: (username: string, password: string) => Promise<any>
-  signOut: () => Promise<any>
+  signOut: () => any
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
@@ -46,7 +46,7 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
     return response
   }
 
-  async function signOut() {
+  function signOut() {
     setToken(null)
     setUser(null)
   }
