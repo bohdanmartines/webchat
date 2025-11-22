@@ -1,6 +1,6 @@
 package repository
 
-import model.{Chat, ChatTable, ChatParticipant, ChatParticipantsTable}
+import model.{Chat, ChatParticipant, ChatParticipantsTable, ChatTable, ChatWithParticipants}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -32,10 +32,12 @@ class ChatRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     db.run(chats.filter(_.id === id).result.headOption)
   }
 
-  def findByUser(userId: Long): Future[Seq[Chat]] = {
+  def findByUser(userId: Long): Future[Seq[ChatWithParticipants]] = {
     val query = chatParticipants.filter(_.userId === userId)
       .join(chats).on(_.chatId === _.id)
       .map(_._2)
-    db.run(query.result)
+    db.run(query.result).map(chats =>
+      chats.map(chat => ChatWithParticipants(chat.id, chat.name, chat.creator, Seq.empty))
+    )
   }
 }

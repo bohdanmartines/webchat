@@ -18,6 +18,6 @@ class ChatService @Inject()(repository: ChatRepository)
 
   def getChats(userId: Long): Future[Seq[ChatResponse]] = {
     val userChats = repository.findByUser(userId)
-    userChats.map(_.map(c => ChatResponse(c.id, c.name)))
+    userChats.map(_.map(c => ChatResponse(c.id, c.name, c.participants.size)))
   }
 }
