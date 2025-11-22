@@ -1,12 +1,28 @@
+import {useEffect, useState} from "react";
 import Navbar from "./Navbar.tsx";
-import {useState} from "react";
 
 function Home() {
 
   const [chats, setChats] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
-  const [loading, setLoading] = useState(null)
-  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    console.log('About to load chats for the user')
+    loadChats()
+  }, [])
+
+  function loadChats() {
+    try {
+      setLoading(true)
+      setError(null)
+      setChats([{name: 'Chat 1'}, {name: 'Chat 2'}])
+    } catch (err: any) {}
+    finally {
+      setLoading(false)
+    }
+  }
 
   return(
     <div className="home-page">
