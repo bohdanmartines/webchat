@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import Navbar from "./Navbar.tsx";
+import * as chatApi from '../api/chat'
 
 function Home() {
 
@@ -13,11 +14,12 @@ function Home() {
     loadChats()
   }, [])
 
-  function loadChats() {
+  async function loadChats() {
     try {
       setLoading(true)
       setError(null)
-      setChats([{name: 'Chat 1'}, {name: 'Chat 2'}])
+      const chatsData = await chatApi.getChats();
+      setChats(chatsData)
     } catch (err: any) {}
     finally {
       setLoading(false)
