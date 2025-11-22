@@ -4,6 +4,7 @@ import * as chatApi from '../api/chat'
 import ChatList from "./ChatList.tsx";
 import {useAuth} from "../api/AuthContext.tsx";
 import '../css/HomePage.css';
+import CreateChatModal from "./CreateChatModal.tsx";
 
 function Home() {
 
@@ -42,6 +43,13 @@ function Home() {
     console.log('Chat clicked: ' + chatId)
   }
 
+  async function handleCreateChat(name: string) {
+    const newChat = await chatApi.createChat(name);
+    console.log('New chat: ', newChat)
+    setChats([...chats, newChat]);
+    setModalOpen(false)
+  }
+
   return (
     <div className="home-page">
       <Navbar/>
@@ -63,8 +71,12 @@ function Home() {
           :
           <ChatList chats={chats} onChatClick={handleChatClick}/>
         }
-
       </main>
+      <CreateChatModal
+        isOpen={modalOpen}
+        onClose={() => {setModalOpen(false)}}
+        onSave={handleCreateChat}
+      />
     </div>
   )
 }
