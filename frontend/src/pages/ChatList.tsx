@@ -18,6 +18,10 @@ function ChatList({ chats, onChatClick }) {
         className="chat-item"
         onClick={() => onChatClick && onChatClick(chat.id)}
       >
+        <div className="chat-icon">💬</div>
+        <div className="chat-info">
+          <div className="chat-name">{chat.name}</div>
+        </div>
       </div>
     ))}
   </div>)
