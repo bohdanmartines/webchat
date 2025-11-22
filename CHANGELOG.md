@@ -19,3 +19,7 @@
 - Added frontend subproject
 - Implemented Registration and Login pages
 - Integrated Registration and Login pages with the API
+
+## [v0.2.1] – Introduce API for chat creation and retrieval
+- Added endpoint to create chat
+- Added endpoint to retrieve chats for current user
