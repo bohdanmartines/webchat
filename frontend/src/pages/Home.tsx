@@ -17,7 +17,6 @@ function Home() {
   const auth = useAuth()
 
   useEffect(() => {
-    console.log('About to load chats for the user')
     loadChats()
   }, [])
 
@@ -45,7 +44,6 @@ function Home() {
 
   async function handleCreateChat(name: string) {
     const newChat = await chatApi.createChat(name);
-    console.log('New chat: ', newChat)
     setChats([...chats, newChat]);
     setModalOpen(false)
   }
