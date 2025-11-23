@@ -4,7 +4,7 @@
 }
 
 .home-content {
-    max-width: 1200px;
+    max-width: 896px;
     margin: 0 auto;
     padding: 30px 20px;
 }
@@ -18,8 +18,9 @@
 
 .content-header h2 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: #333;
+    font-weight: 600;
 }
 
 .btn-new-chat {
