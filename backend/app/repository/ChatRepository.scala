@@ -17,13 +17,16 @@ class ChatRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   private val chats = TableQuery[ChatTable]
   private val chatParticipants = TableQuery[ChatParticipantsTable]
 
-  def create(chatToInsert: Chat): Future[Chat] = {
+  def create(chatToInsert: Chat): Future[ChatWithParticipantCount] = {
     val insertChat = (chats returning chats.map(_.id) into ((chat, id) => chat.copy(id = id))) += chatToInsert
 
     val action = for {
       chat <- insertChat
       _ <- chatParticipants += ChatParticipant(chatId = chat.id, userId = chat.creator)
-    } yield chat
+      participantCount <- chatParticipants.filter(_.chatId === chat.id).length.result
+    } yield ChatWithParticipantCount(
+      chat.id, chat.name, chat.creator, participantCount
+    )
 
     db.run(action.transactionally)
   }

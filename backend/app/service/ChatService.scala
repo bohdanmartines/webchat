@@ -13,7 +13,7 @@ class ChatService @Inject()(repository: ChatRepository)
 
   def createChat(chatCreate: ChatCreate, creator: Long): Future[ChatResponse] = {
     repository.create(Chat(name = chatCreate.name, creator = creator))
-      .map(c => ChatResponse(c.id, c.name))
+      .map(c => ChatResponse(c.id, c.name, c.participantCount))
   }
 
   def getChats(userId: Long): Future[Seq[ChatResponse]] = {
