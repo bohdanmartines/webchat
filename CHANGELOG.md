@@ -23,3 +23,8 @@
 ## [v0.2.1] – Introduce API for chat creation and retrieval
 - Added endpoint to create chat
 - Added endpoint to retrieve chats for current user
+
+## [v0.2.2] – Display user chats
+- Display user chats on the Home page
+- Allow adding new chats
+- Allow filtering chats by name
