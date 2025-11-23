@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import Navbar from "./Navbar.tsx";
 import * as chatApi from '../api/chat'
 import ChatList from "./ChatList.tsx";
@@ -9,6 +9,7 @@ import CreateChatModal from "./CreateChatModal.tsx";
 function Home() {
 
   const [chats, setChats] = useState([])
+  const [searchQuery, setSearchQuery] = useState('')
 
   const [modalOpen, setModalOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -19,6 +20,17 @@ function Home() {
   useEffect(() => {
     loadChats()
   }, [])
+
+  const filteredChats = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return chats;
+    }
+
+    const query = searchQuery.toLowerCase();
+    return chats.filter(chat =>
+      chat.name.toLowerCase().includes(query)
+    );
+  }, [chats, searchQuery]);
 
   async function loadChats() {
     try {
@@ -62,12 +74,22 @@ function Home() {
           </button>
         </div>
 
+        <div className="search-container">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="🔍 Search chats..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+
         {error && <div className="error-banner">{error}</div>}
 
         {loading ?
           <div className="loading-banner">Loading...</div>
           :
-          <ChatList chats={chats} onChatClick={handleChatClick}/>
+          <ChatList chats={filteredChats} onChatClick={handleChatClick}/>
         }
       </main>
       <CreateChatModal
