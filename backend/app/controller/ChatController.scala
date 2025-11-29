@@ -27,8 +27,12 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
       .map(chats => Ok(Json.toJson(chats)))
   }
 
-  def getChat(chatId: Long) = securedActionFactory.async { request =>
+  def getChat(chatId: Long): Action[AnyContent] = securedActionFactory.async { request =>
     chatService.getChat(1, request.userId)
-      .map(chat => Ok(Json.toJson(chat)))
+      .map {
+        case Some(chat) => Ok(Json.toJson(chat))
+        case None => NotFound(Json.obj("error" -> "Chat not found"))
+      }
+
   }
 }

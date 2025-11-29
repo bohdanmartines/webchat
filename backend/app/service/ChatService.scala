@@ -1,7 +1,7 @@
 package service
 
 import dto.ChatCreate
-import dto.response.{ChatDetails, ChatSummary}
+import dto.response.{ChatDetails, ChatSummary, UserResponse}
 import model.Chat
 import play.api.libs.json.Json
 import repository.{ChatRepository, UserRepository}
@@ -23,7 +23,12 @@ class ChatService @Inject()(repository: ChatRepository)
     userChats.map(_.map(c => ChatSummary(c.id, c.name, c.participantCount)))
   }
 
-  def getChat(chatId: Long, userId: Long): Future[ChatDetails] = {
-    Future.successful(ChatDetails(1, "Mock Chat", Seq.empty))
+  def getChat(chatId: Long, userId: Long): Future[Option[ChatDetails]] = {
+    repository.findByIdAndUser(chatId, userId)
+      .map(_.map(c => ChatDetails(
+        c.id,
+        c.name,
+        c.participants.map(user => UserResponse(user.id, user.username))
+      )))
   }
 }

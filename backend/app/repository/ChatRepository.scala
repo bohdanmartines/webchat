@@ -53,4 +53,8 @@ class ChatRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
         }
     }
   }
+
+  def findByIdAndUser(id: Long, userId: Long): Future[Option[ChatWithParticipants]] = {
+    Future.successful(None)
+  }
 }
