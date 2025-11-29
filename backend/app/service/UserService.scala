@@ -1,7 +1,7 @@
 package service
 
 import com.google.inject.Singleton
-import dto.UserResponse
+import dto.response.UserResponse
 import repository.UserRepository
 
 import javax.inject.Inject

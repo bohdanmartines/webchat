@@ -1,4 +1,4 @@
-package dto
+package dto.response
 
 import play.api.libs.json.{Json, OFormat}
 

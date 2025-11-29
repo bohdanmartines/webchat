@@ -1,6 +1,7 @@
 package service
 
-import dto.{ChatCreate, ChatResponse}
+import dto.ChatCreate
+import dto.response.ChatResponse
 import model.Chat
 import repository.{ChatRepository, UserRepository}
 
