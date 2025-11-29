@@ -63,7 +63,6 @@ function Home() {
 
   return (
     <div className="home-page">
-      <Navbar/>
       <main className="home-content">
         <div className="content-header">
           <h2>Your Chats</h2>

@@ -6,13 +6,19 @@ import Login from "./pages/Login.tsx";
 import Home from "./pages/Home.tsx";
 import {useAuth} from "./api/AuthContext.tsx";
 import Chat from "./pages/Chat.tsx";
+import Navbar from "./pages/Navbar.tsx";
 
 function ProtectedPage({children}: { children: JSX.Element }) {
   const auth = useAuth()
   if (!auth.token) {
     return <Navigate to="/login" replace/>;
   }
-  return children;
+  return (
+    <div>
+      <Navbar/>
+      {children}
+    </div>
+  )
 }
 
 function App() {
