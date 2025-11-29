@@ -9,3 +9,8 @@ export async function getChats() {
   let response = await http.get('/chat');
   return response.data;
 }
+
+export async function getChat(chatId: number) {
+  let response = await http.get('/chat/' + chatId);
+  return response.data;
+}

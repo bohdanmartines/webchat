@@ -52,8 +52,6 @@ function Home() {
   }
 
   function handleChatClick(chatId: number) {
-    // TODO Implement me
-    console.log('Chat clicked: ' + chatId)
     navigate('/chat/' + chatId)
   }
 

@@ -1,6 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import type {Chat} from "../types/Chat.ts";
+import * as chatApi from "../api/chat.ts";
 
 function Chat() {
 
@@ -10,9 +11,36 @@ function Chat() {
   const navigate = useNavigate();
 
   const { chatId } = useParams<{ chatId: string }>();
+  if (!chatId) {
+    navigate('/home');
+    return null;
+  }
+  const chatIdNumber = parseInt(chatId, 10);
+
+  useEffect(() => {
+    loadChat();
+  }, [])
+
+  async function loadChat() {
+    try {
+      setLoading(true);
+      setError(null);
+      const chatData = await chatApi.getChat(chatIdNumber);
+      setChat(chatData);
+    } catch (err: any) {
+      setError(err.message || 'Failed to load chat');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function handleBack() {
     navigate('/home');
+  }
+
+  function getChatDisplayName() {
+    if (!chat) return '';
+    return chat.name ? chat.name : chat.participants.map(_ => _.username)
   }
 
   if (loading) {
@@ -43,9 +71,13 @@ function Chat() {
   }
 
   return (
-    <div>
-      <div>Chat</div>
-      <div>Chat ID: {chatId}</div>
+    <div className="chat-page">
+      <div className="chat-header">
+        <button className="back-button" onClick={handleBack}>
+          ←
+        </button>
+        <span className="chat-title">{getChatDisplayName()}</span>
+      </div>
     </div>
   )
 }
