@@ -5,6 +5,7 @@ import ChatList from "./ChatList.tsx";
 import {useAuth} from "../api/AuthContext.tsx";
 import '../css/HomePage.css';
 import CreateChatModal from "./CreateChatModal.tsx";
+import {useNavigate} from "react-router-dom";
 
 function Home() {
 
@@ -16,6 +17,7 @@ function Home() {
   const [error, setError] = useState('')
 
   const auth = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     loadChats()
@@ -52,6 +54,7 @@ function Home() {
   function handleChatClick(chatId: number) {
     // TODO Implement me
     console.log('Chat clicked: ' + chatId)
+    navigate('/chat/' + chatId)
   }
 
   async function handleCreateChat(name: string) {
