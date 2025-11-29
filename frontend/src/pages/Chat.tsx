@@ -81,6 +81,11 @@ function Chat() {
         </button>
         <span className="chat-title">{getChatDisplayName()}</span>
       </div>
+      <div className="messages-area">
+        <div className="no-messages">
+          Messages will appear here
+        </div>
+      </div>
     </div>
   )
 }
