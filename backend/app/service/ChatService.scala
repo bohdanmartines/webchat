@@ -24,11 +24,15 @@ class ChatService @Inject()(repository: ChatRepository)
   }
 
   def getChat(chatId: Long, userId: Long): Future[Option[ChatDetails]] = {
-    repository.findByIdAndUser(chatId)
-      .map(_.map(c => ChatDetails(
-        c.id,
-        c.name,
-        c.participants.map(user => UserResponse(user.id, user.username))
-      )))
+    repository.isUserInChat(chatId, userId)
+      .flatMap {
+        case true => repository.findByIdAndUser(chatId)
+          .map(_.map(c => ChatDetails(
+            c.id,
+            c.name,
+            c.participants.map(user => UserResponse(user.id, user.username))
+          )))
+        case false => Future.successful(None)
+      }
   }
 }

@@ -55,6 +55,11 @@ class ChatRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     }
   }
 
+  def isUserInChat(chatId: Long, userId: Long): Future[Boolean] = {
+    val action = chatParticipants.filter(_.chatId === chatId).filter(_.userId === userId).exists.result
+    db.run(action)
+  }
+
   def findByIdAndUser(id: Long): Future[Option[ChatWithParticipants]] = {
     val action = for {
       chatOption <- chats.filter(_.id === id).result.headOption
