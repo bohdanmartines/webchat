@@ -12,3 +12,7 @@ Authorization: Bearer place_token_here
 ### Get chats for the current user
 GET {{baseUrl}}/api/chat
 Authorization: Bearer place_token_here
+
+### Get chat details by ID
+GET {{baseUrl}}/api/chat/1
+Authorization: Bearer place_token_here

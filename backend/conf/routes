@@ -6,3 +6,4 @@ GET         /api/auth/me              controller.AuthController.me()
 # Chat endpoints
 POST        /api/chat                 controller.ChatController.createChat()
 GET         /api/chat                 controller.ChatController.getChats()
+GET         /api/chat/:id             controller.ChatController.getChat(id: Long)
