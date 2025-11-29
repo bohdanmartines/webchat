@@ -48,7 +48,7 @@ function Chat() {
 
   if (loading) {
     return (
-      <div className="chat-page">
+      <div className="chat-page page-container">
         <div className="chat-header">
           <button className="back-button" onClick={handleBack}>
             ←
@@ -61,7 +61,7 @@ function Chat() {
 
   if (error || !chat) {
     return (
-      <div className="chat-page">
+      <div className="chat-page page-container">
         <div className="chat-header">
           <button className="back-button" onClick={handleBack}>
             ←
@@ -74,7 +74,7 @@ function Chat() {
   }
 
   return (
-    <div className="chat-page">
+    <div className="chat-page page-container">
       <div className="chat-header">
         <button className="back-button" onClick={handleBack}>
           ←

@@ -7,7 +7,7 @@ export default function Navbar() {
 
   return(
     <header className="navbar">
-      <div className="navbar-content">
+      <div className="navbar-content page-container">
         <div className="navbar-logo">WebChat</div>
         <div className="navbar-actions">
           <div className="navbar-user">{user}</div>

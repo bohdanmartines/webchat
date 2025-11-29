@@ -63,7 +63,7 @@ function Home() {
 
   return (
     <div className="home-page">
-      <main className="home-content">
+      <main className="home-content page-container">
         <div className="content-header">
           <h2>Your Chats</h2>
           <button
