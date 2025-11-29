@@ -1,7 +1,10 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
+
 import type {Chat} from "../types/Chat.ts";
 import * as chatApi from "../api/chat.ts";
+
+import '../css/Chat.css';
 
 function Chat() {
 
