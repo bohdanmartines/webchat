@@ -86,6 +86,17 @@ function Chat() {
           Messages will appear here
         </div>
       </div>
+      <div className="input-area">
+        <input
+          type="text"
+          className="message-input"
+          placeholder="Type a message..."
+          disabled
+        />
+        <button className="send-button" disabled>
+          Send
+        </button>
+      </div>
     </div>
   )
 }

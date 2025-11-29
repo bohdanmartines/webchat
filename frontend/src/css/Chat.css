@@ -59,3 +59,79 @@
     color: #999;
     font-size: 14px;
 }
+
+.error-message {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #dc3545;
+    font-size: 14px;
+    padding: 16px;
+}
+
+.input-area {
+    display: flex;
+    padding: 12px 16px;
+    background-color: white;
+    border-top: 1px solid #e5e5ea;
+    gap: 12px;
+}
+
+.message-input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 1px solid #e5e5ea;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.message-input:focus {
+    border-color: #007bff;
+}
+
+.message-input:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.send-button {
+    padding: 10px 24px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.send-button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.send-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Scrollbar styling */
+.messages-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.messages-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.messages-area::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.messages-area::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
