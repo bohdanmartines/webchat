@@ -28,3 +28,9 @@
 - Display user chats on the Home page
 - Allow adding new chats
 - Allow filtering chats by name
+
+## [v0.3.0] – Add individual chat page
+- Add chat page
+- Display chat name
+- Display empty message area
+- Display disabled input and button for message sending
