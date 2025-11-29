@@ -1,7 +1,7 @@
 package service
 
 import dto.ChatCreate
-import dto.response.ChatResponse
+import dto.response.ChatSummary
 import model.Chat
 import repository.{ChatRepository, UserRepository}
 
@@ -12,13 +12,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class ChatService @Inject()(repository: ChatRepository)
                            (implicit ec: ExecutionContext) {
 
-  def createChat(chatCreate: ChatCreate, creator: Long): Future[ChatResponse] = {
+  def createChat(chatCreate: ChatCreate, creator: Long): Future[ChatSummary] = {
     repository.create(Chat(name = chatCreate.name, creator = creator))
-      .map(c => ChatResponse(c.id, c.name, c.participantCount))
+      .map(c => ChatSummary(c.id, c.name, c.participantCount))
   }
 
-  def getChats(userId: Long): Future[Seq[ChatResponse]] = {
+  def getChats(userId: Long): Future[Seq[ChatSummary]] = {
     val userChats = repository.findByUser(userId)
-    userChats.map(_.map(c => ChatResponse(c.id, c.name, c.participantCount)))
+    userChats.map(_.map(c => ChatSummary(c.id, c.name, c.participantCount)))
   }
 }
