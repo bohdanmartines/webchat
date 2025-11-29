@@ -28,6 +28,7 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
   }
 
   def getChat(chatId: Long) = securedActionFactory.async { request =>
-    Future.successful(Ok(Json.obj("message" -> s"Chat details for $chatId")))
+    chatService.getChat(1, request.userId)
+      .map(chat => Ok(Json.toJson(chat)))
   }
 }
