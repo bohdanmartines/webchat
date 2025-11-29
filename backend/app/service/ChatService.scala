@@ -24,7 +24,7 @@ class ChatService @Inject()(repository: ChatRepository)
   }
 
   def getChat(chatId: Long, userId: Long): Future[Option[ChatDetails]] = {
-    repository.findByIdAndUser(chatId, userId)
+    repository.findByIdAndUser(chatId)
       .map(_.map(c => ChatDetails(
         c.id,
         c.name,

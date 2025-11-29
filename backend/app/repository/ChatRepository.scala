@@ -1,6 +1,6 @@
 package repository
 
-import model.{Chat, ChatParticipant, ChatParticipantsTable, ChatTable, ChatWithParticipantCount, ChatWithParticipants}
+import model.{Chat, ChatParticipant, ChatParticipantsTable, ChatTable, ChatWithParticipantCount, ChatWithParticipants, UserTable}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -16,6 +16,7 @@ class ChatRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
 
   private val chats = TableQuery[ChatTable]
   private val chatParticipants = TableQuery[ChatParticipantsTable]
+  private val users = TableQuery[UserTable]
 
   def create(chatToInsert: Chat): Future[ChatWithParticipantCount] = {
     val insertChat = (chats returning chats.map(_.id) into ((chat, id) => chat.copy(id = id))) += chatToInsert
@@ -54,7 +55,16 @@ class ChatRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     }
   }
 
-  def findByIdAndUser(id: Long, userId: Long): Future[Option[ChatWithParticipants]] = {
-    Future.successful(None)
+  def findByIdAndUser(id: Long): Future[Option[ChatWithParticipants]] = {
+    val action = for {
+      chatOption <- chats.filter(_.id === id).result.headOption
+      participants <- chatParticipants.filter(_.chatId === id)
+        .join(users).on(_.userId === _.id)
+        .map(_._2)
+        .result
+    } yield chatOption.map{ chat =>
+      ChatWithParticipants(chat.id, chat.name, chat.creator, participants)
+    }
+    db.run(action)
   }
 }
