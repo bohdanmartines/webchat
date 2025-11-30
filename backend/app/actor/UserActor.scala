@@ -1,6 +1,6 @@
 package actor
 
-import actor.WebSocketProtocol.{Authenticate, Authenticated, SendMessage, parseClientMessage, serializeServerMessage}
+import actor.WebSocketProtocol.{Authenticate, Authenticated, Error, SendMessage, parseClientMessage, serializeServerMessage}
 import dto.response.UserResponse
 import org.apache.pekko.actor.{Actor, ActorRef, Props}
 import play.api.libs.json.JsValue
@@ -18,8 +18,9 @@ class UserActor(out: ActorRef, jwtService: JwtService) extends Actor {
     case msg: JsValue => {
       parseClientMessage(msg) match {
         case Some(Authenticate(token)) if !authenticated =>
-          println(s"Received an authenticate message")
           handleAuthentication(token)
+        case Some(Authenticate(_)) if authenticated =>
+          out ! serializeServerMessage(Error("Already authenticated"))
         case Some(SendMessage(content)) => println(s"Received a client message '$content'")
         case None => println("Unknown message format")
       }
