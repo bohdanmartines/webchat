@@ -12,6 +12,7 @@ object WebSocketProtocol {
 
   sealed trait ServerMessage
   case class Authenticated(success: Boolean, error: Option[String] = None) extends ServerMessage
+  case class NewMessage(id: Long, userId: Long, username: String, content: String) extends ServerMessage
   case class Error(error: String) extends ServerMessage
 
   // JSON formats
@@ -19,6 +20,7 @@ object WebSocketProtocol {
   implicit val sendMessageFormat: Format[SendMessage] = Json.format[SendMessage]
 
   implicit val authenticatedFormat: Format[Authenticated] = Json.format[Authenticated]
+  implicit val newMessageFormat: Format[NewMessage] = Json.format[NewMessage]
   implicit val errorFormat: Format[Error] = Json.format[Error]
 
   def parseClientMessage(json: JsValue): Option[ClientMessage] = {
@@ -36,6 +38,8 @@ object WebSocketProtocol {
     message match {
       case m: Authenticated =>
         Json.obj(MessageTypeField -> "authenticated") ++ Json.toJson(m).as[JsObject]
+      case m: NewMessage =>
+        Json.obj(MessageTypeField -> "newMessage") ++ Json.toJson(m).as[JsObject]
       case m: Error =>
         Json.obj(MessageTypeField -> "error") ++ Json.toJson(m).as[JsObject]
     }

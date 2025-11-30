@@ -1,7 +1,7 @@
 package actor
 
 import actor.ChatActor.{IncomingMessage, UserConnected, UserDisconnected}
-import actor.WebSocketProtocol.{Authenticate, Authenticated, Error, SendMessage, parseClientMessage, serializeServerMessage}
+import actor.WebSocketProtocol.{Authenticate, Authenticated, Error, NewMessage, SendMessage, parseClientMessage, serializeServerMessage}
 import dto.response.UserResponse
 import org.apache.pekko.actor.{Actor, ActorRef, Props}
 import play.api.libs.json.JsValue
@@ -36,13 +36,13 @@ class UserActor(out: ActorRef,
           userOption match {
             case Some(user) =>
               chatActorOption.foreach(_ ! IncomingMessage(user.id, user.username, content))
-              println(s"Received a client message '$content'")
           }
         case Some(SendMessage(_)) if !authenticated =>
           out ! serializeServerMessage(Error("Non authenticated for the chat connection"))
         case None => println("Unknown message format")
       }
     }
+    case msg: NewMessage => out ! serializeServerMessage(msg)
     case _ => println("Unknown message format")
   }
 

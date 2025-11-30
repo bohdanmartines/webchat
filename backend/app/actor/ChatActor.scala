@@ -1,5 +1,6 @@
 package actor
 
+import actor.WebSocketProtocol.NewMessage
 import org.apache.pekko.actor.{Actor, ActorRef, Props}
 
 import scala.collection.concurrent.TrieMap
@@ -16,7 +17,10 @@ class ChatActor(chatId: Long) extends Actor {
     case UserDisconnected(userId) =>
       userActors -= userId
       println(s"User $userId disconnected from chat $chatId. Current users in the chat are $userActors")
-    case IncomingMessage(userId, username, content) => println(s"Chat $chatId received message `$content`")
+    case IncomingMessage(userId, username, content) =>
+      userActors.foreach(
+        entry => entry._2 ! NewMessage(0, userId, username, content)
+      )
   }
 }
 
