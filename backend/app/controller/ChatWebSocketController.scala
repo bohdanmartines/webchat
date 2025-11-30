@@ -1,6 +1,6 @@
 package controller
 
-import actor.UserActor
+import actor.{ChatManager, UserActor}
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.Materializer
 import play.api.libs.json.JsValue
@@ -16,14 +16,15 @@ import scala.concurrent.ExecutionContext
 class ChatWebSocketController @Inject()(val cc: ControllerComponents,
                                         jwtService: JwtService,
                                         userRepository: UserRepository,
-                                        chatRepository: ChatRepository)
+                                        chatRepository: ChatRepository,
+                                        charManager: ChatManager)
                                        (implicit system: ActorSystem,
                                          mat: Materializer,
                                          ec: ExecutionContext) extends AbstractController(cc) {
 
   def socket(chatId: Long): WebSocket = WebSocket.accept[JsValue, JsValue]{ request =>
     ActorFlow.actorRef(out => {
-      UserActor.props(out, chatId, jwtService, userRepository, chatRepository)
+      UserActor.props(out, chatId, jwtService, userRepository, chatRepository, charManager.getChatActor)
     })
   }
 }

@@ -14,11 +14,13 @@ class UserActor(out: ActorRef,
                 chatId: Long,
                 jwtService: JwtService,
                 userRepository: UserRepository,
-                chatRepository: ChatRepository) extends Actor {
+                chatRepository: ChatRepository,
+                getChatActor: Long => ActorRef) extends Actor {
 
   private implicit val ec: ExecutionContext = context.dispatcher
 
   private var userOption: Option[UserResponse] = None
+  private var chatActorOption: Option[ActorRef] = None
 
   private var authenticated = false
 
@@ -47,6 +49,7 @@ class UserActor(out: ActorRef,
         verifyAccessFuture.onComplete {
           case Success((Some(user), true)) =>
             userOption = Some(UserResponse(userId, user.username))
+            chatActorOption = Some(getChatActor.apply(chatId))
             authenticated = true
             println(s"User $userId is authenticated for a chat connection")
             out ! serializeServerMessage(Authenticated(success = true))
@@ -66,7 +69,8 @@ object UserActor {
             chatId: Long,
             jwtService: JwtService,
             userRepository: UserRepository,
-            chatRepository: ChatRepository): Props = {
-    Props(new UserActor(out, chatId, jwtService, userRepository, chatRepository))
+            chatRepository: ChatRepository,
+            getChatActor: Long => ActorRef): Props = {
+    Props(new UserActor(out, chatId, jwtService, userRepository, chatRepository, getChatActor))
   }
 }
