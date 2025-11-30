@@ -4,11 +4,18 @@ import actor.WebSocketProtocol.{Authenticate, Authenticated, Error, SendMessage,
 import dto.response.UserResponse
 import org.apache.pekko.actor.{Actor, ActorRef, Props}
 import play.api.libs.json.JsValue
+import repository.{ChatRepository, UserRepository}
 import service.JwtService
 
 import scala.concurrent.ExecutionContext
+import scala.util.Success
 
-class UserActor(out: ActorRef, jwtService: JwtService) extends Actor {
+class UserActor(out: ActorRef,
+                chatId: Long,
+                jwtService: JwtService,
+                userRepository: UserRepository,
+                chatRepository: ChatRepository)
+               (implicit ec: ExecutionContext) extends Actor {
 
   private var userOption: Option[UserResponse] = None
 
@@ -31,10 +38,21 @@ class UserActor(out: ActorRef, jwtService: JwtService) extends Actor {
   private def handleAuthentication(token: String): Unit = {
     jwtService.validateToken(token) match {
       case Some(userId) =>
-        userOption = Some(UserResponse(userId, "MOCK_NAME"))
-        authenticated = true
-        println(s"User $userId is authenticated for a chat connection")
-        out ! serializeServerMessage(Authenticated(success = true))
+        val verifyAccessFuture = for {
+          userOpt <- userRepository.findById(userId)
+          hasAccess <- chatRepository.isUserInChat(chatId, userId)
+        } yield (userOpt, hasAccess)
+
+        verifyAccessFuture.onComplete {
+          case Success((Some(user), true)) =>
+            userOption = Some(UserResponse(userId, user.username))
+            authenticated = true
+            println(s"User $userId is authenticated for a chat connection")
+            out ! serializeServerMessage(Authenticated(success = true))
+          case _ =>
+            out ! serializeServerMessage(Error("Authentication failed for a chat connection"))
+        }
+
       case None =>
         println("Authentication attempt failed for a chat connection")
         out ! serializeServerMessage(Authenticated(success = false, Some("Invalid token")))
@@ -44,8 +62,11 @@ class UserActor(out: ActorRef, jwtService: JwtService) extends Actor {
 
 object UserActor {
   def props(out: ActorRef,
-            jwtService: JwtService
+            chatId: Long,
+            jwtService: JwtService,
+            userRepository: UserRepository,
+            chatRepository: ChatRepository
            )(implicit ec: ExecutionContext): Props = {
-    Props(classOf[UserActor], out, jwtService)
+    Props(classOf[UserActor], out, chatId, jwtService, userRepository, chatRepository)
   }
 }
