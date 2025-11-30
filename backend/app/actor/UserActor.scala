@@ -1,12 +1,16 @@
 package actor
 
-import actor.WebSocketProtocol.{Authenticate, SendMessage, parseClientMessage}
-import org.apache.pekko.actor.{Actor, Props}
+import actor.WebSocketProtocol.{Authenticate, Authenticated, SendMessage, parseClientMessage, serializeServerMessage}
+import dto.response.UserResponse
+import org.apache.pekko.actor.{Actor, ActorRef, Props}
 import play.api.libs.json.JsValue
+import service.JwtService
 
 import scala.concurrent.ExecutionContext
 
-class UserActor extends Actor {
+class UserActor(out: ActorRef, jwtService: JwtService) extends Actor {
+
+  private var userOption: Option[UserResponse] = None
 
   private var authenticated = false
 
@@ -23,15 +27,24 @@ class UserActor extends Actor {
     case _ => println("Unknown message format")
   }
 
-  private def handleAuthentication(token: String) = {
-    println("Authenticating a user")
-    // TODO Verify the token
-    authenticated = true
+  private def handleAuthentication(token: String): Unit = {
+    jwtService.validateToken(token) match {
+      case Some(userId) =>
+        userOption = Some(UserResponse(userId, "MOCK_NAME"))
+        authenticated = true
+        println(s"User $userId is authenticated for a chat connection")
+        out ! serializeServerMessage(Authenticated(success = true))
+      case None =>
+        println("Authentication attempt failed for a chat connection")
+        out ! serializeServerMessage(Authenticated(success = false, Some("Invalid token")))
+    }
   }
 }
 
 object UserActor {
-  def props()(implicit ec: ExecutionContext): Props = {
-    Props(classOf[UserActor])
+  def props(out: ActorRef,
+            jwtService: JwtService
+           )(implicit ec: ExecutionContext): Props = {
+    Props(classOf[UserActor], out, jwtService)
   }
 }
