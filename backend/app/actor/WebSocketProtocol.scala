@@ -24,7 +24,6 @@ object WebSocketProtocol {
   implicit val errorFormat: Format[Error] = Json.format[Error]
 
   def parseClientMessage(json: JsValue): Option[ClientMessage] = {
-    println(s"Parsing client message $json")
     (json \ MessageTypeField).asOpt[String] match {
       case Some("authenticate") => json.asOpt[Authenticate]
       case Some("sendMessage") => json.asOpt[SendMessage]
