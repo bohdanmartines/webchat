@@ -12,7 +12,6 @@ object WebSocketProtocol {
 
   sealed trait ServerMessage
   case class Authenticated(success: Boolean, error: Option[String] = None) extends ServerMessage
-  case class IncomingMessage(userId: Long, username: String, content: String) extends ServerMessage
   case class Error(error: String) extends ServerMessage
 
   // JSON formats

@@ -1,6 +1,7 @@
 package actor
 
-import actor.WebSocketProtocol.{Authenticate, Authenticated, Error, IncomingMessage, SendMessage, parseClientMessage, serializeServerMessage}
+import actor.ChatActor.{IncomingMessage, UserConnected, UserDisconnected}
+import actor.WebSocketProtocol.{Authenticate, Authenticated, Error, SendMessage, parseClientMessage, serializeServerMessage}
 import dto.response.UserResponse
 import org.apache.pekko.actor.{Actor, ActorRef, Props}
 import play.api.libs.json.JsValue
@@ -50,13 +51,15 @@ class UserActor(out: ActorRef,
       case Some(userId) =>
         val verifyAccessFuture = for {
           userOpt <- userRepository.findById(userId)
+          chatOpt <- chatRepository.findById(userId)
           hasAccess <- chatRepository.isUserInChat(chatId, userId)
-        } yield (userOpt, hasAccess)
+        } yield (userOpt, chatOpt, hasAccess)
 
         verifyAccessFuture.onComplete {
-          case Success((Some(user), true)) =>
+          case Success((Some(user), Some(_), true)) =>
             userOption = Some(UserResponse(userId, user.username))
             chatActorOption = Some(getChatActor.apply(chatId))
+            chatActorOption.foreach(actor => actor ! UserConnected(userId, self))
             authenticated = true
             println(s"User $userId is authenticated for a connection to chat $chatId")
             out ! serializeServerMessage(Authenticated(success = true))
@@ -68,6 +71,13 @@ class UserActor(out: ActorRef,
         println("Authentication attempt failed for a chat connection")
         out ! serializeServerMessage(Authenticated(success = false, Some("Invalid token")))
     }
+  }
+
+  override def postStop(): Unit = {
+    for {
+      user <- userOption
+      chatActor <- chatActorOption
+    } chatActor ! UserDisconnected(user.id)
   }
 }
 
