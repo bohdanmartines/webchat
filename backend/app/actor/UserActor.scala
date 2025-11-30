@@ -77,7 +77,7 @@ class UserActor(out: ActorRef,
     for {
       user <- userOption
       chatActor <- chatActorOption
-    } chatActor ! UserDisconnected(user.id)
+    } chatActor ! UserDisconnected(user.id, self)
   }
 }
 
