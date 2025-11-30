@@ -14,8 +14,9 @@ class UserActor(out: ActorRef,
                 chatId: Long,
                 jwtService: JwtService,
                 userRepository: UserRepository,
-                chatRepository: ChatRepository)
-               (implicit ec: ExecutionContext) extends Actor {
+                chatRepository: ChatRepository) extends Actor {
+
+  private implicit val ec: ExecutionContext = context.dispatcher
 
   private var userOption: Option[UserResponse] = None
 
@@ -65,8 +66,7 @@ object UserActor {
             chatId: Long,
             jwtService: JwtService,
             userRepository: UserRepository,
-            chatRepository: ChatRepository
-           )(implicit ec: ExecutionContext): Props = {
-    Props(classOf[UserActor], out, chatId, jwtService, userRepository, chatRepository)
+            chatRepository: ChatRepository): Props = {
+    Props(new UserActor(out, chatId, jwtService, userRepository, chatRepository))
   }
 }
