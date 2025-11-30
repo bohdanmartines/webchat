@@ -34,3 +34,10 @@
 - Display chat name
 - Display empty message area
 - Display disabled input and button for message sending
+
+## [v0.4.0] – Add support for chat messaging on the backend
+- Introduce a WebSocket endpoint to open a chat connection
+- Track currently opened chats
+- Track when a user is connected and disconnected to the chat
+- Broadcast messages to all currently connected participants
+- Add support for a user connected to the chat from multiple tabs
