@@ -1,6 +1,6 @@
 package actor
 
-import actor.WebSocketProtocol.{Authenticate, Authenticated, Error, SendMessage, parseClientMessage, serializeServerMessage}
+import actor.WebSocketProtocol.{Authenticate, Authenticated, Error, IncomingMessage, SendMessage, parseClientMessage, serializeServerMessage}
 import dto.response.UserResponse
 import org.apache.pekko.actor.{Actor, ActorRef, Props}
 import play.api.libs.json.JsValue
@@ -31,7 +31,14 @@ class UserActor(out: ActorRef,
           handleAuthentication(token)
         case Some(Authenticate(_)) if authenticated =>
           out ! serializeServerMessage(Error("Already authenticated"))
-        case Some(SendMessage(content)) => println(s"Received a client message '$content'")
+        case Some(SendMessage(content)) if authenticated =>
+          userOption match {
+            case Some(user) =>
+              chatActorOption.foreach(_ ! IncomingMessage(user.id, user.username, content))
+              println(s"Received a client message '$content'")
+          }
+        case Some(SendMessage(_)) if !authenticated =>
+          out ! serializeServerMessage(Error("Non authenticated for the chat connection"))
         case None => println("Unknown message format")
       }
     }
@@ -51,7 +58,7 @@ class UserActor(out: ActorRef,
             userOption = Some(UserResponse(userId, user.username))
             chatActorOption = Some(getChatActor.apply(chatId))
             authenticated = true
-            println(s"User $userId is authenticated for a chat connection")
+            println(s"User $userId is authenticated for a connection to chat $chatId")
             out ! serializeServerMessage(Authenticated(success = true))
           case _ =>
             out ! serializeServerMessage(Error("Authentication failed for a chat connection"))

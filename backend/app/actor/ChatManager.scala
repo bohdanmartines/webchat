@@ -2,9 +2,10 @@ package actor
 
 import org.apache.pekko.actor.{ActorRef, ActorSystem}
 
+import javax.inject.Inject
 import scala.collection.concurrent.TrieMap
 
-class ChatManager(actorSystem: ActorSystem) {
+class ChatManager @Inject() (actorSystem: ActorSystem) {
 
   private val chatActors = TrieMap.empty[Long, ActorRef]
 
