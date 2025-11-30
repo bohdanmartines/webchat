@@ -23,21 +23,21 @@ class UserActor(out: ActorRef,
   private var userOption: Option[UserResponse] = None
   private var chatActorOption: Option[ActorRef] = None
 
-  private var authenticated = false
+  private def isAuthenticated: Boolean = userOption.isDefined
 
   override def receive: Receive = {
     case msg: JsValue => {
       parseClientMessage(msg) match {
-        case Some(Authenticate(token)) if !authenticated =>
+        case Some(Authenticate(token)) if !isAuthenticated =>
           handleAuthentication(token)
-        case Some(Authenticate(_)) if authenticated =>
+        case Some(Authenticate(_)) if isAuthenticated =>
           out ! serializeServerMessage(Error("Already authenticated"))
-        case Some(SendMessage(content)) if authenticated =>
+        case Some(SendMessage(content)) if isAuthenticated =>
           userOption match {
             case Some(user) =>
               chatActorOption.foreach(_ ! IncomingMessage(user.id, user.username, content))
           }
-        case Some(SendMessage(_)) if !authenticated =>
+        case Some(SendMessage(_)) if !isAuthenticated =>
           out ! serializeServerMessage(Error("Non authenticated for the chat connection"))
         case None => println("Unknown message format")
       }
@@ -60,7 +60,6 @@ class UserActor(out: ActorRef,
             userOption = Some(UserResponse(userId, user.username))
             chatActorOption = Some(getChatActor.apply(chatId))
             chatActorOption.foreach(actor => actor ! UserConnected(userId, self))
-            authenticated = true
             println(s"User $userId is authenticated for a connection to chat $chatId")
             out ! serializeServerMessage(Authenticated(success = true))
           case _ =>
