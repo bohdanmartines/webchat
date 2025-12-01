@@ -1,4 +1,4 @@
-package model
+package model.message
 
 import play.api.libs.json.{Format, Json}
 
