@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS chat_participants (
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE TABLE IF NOT EXISTS message (
+CREATE TABLE IF NOT EXISTS messages (
     id              BIGINT AUTO_INCREMENT PRIMARY KEY,
     chat_id         BIGINT NOT NULL,
     user_id         BIGINT NOT NULL,
