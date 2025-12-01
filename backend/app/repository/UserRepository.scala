@@ -1,6 +1,6 @@
 package repository
 
-import model.{User, UserTable}
+import model.user.{User, UserTable}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 

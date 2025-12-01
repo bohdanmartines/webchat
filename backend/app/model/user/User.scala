@@ -1,4 +1,4 @@
-package model
+package model.user
 
 import play.api.libs.json.{Json, OFormat}
 

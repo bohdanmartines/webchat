@@ -1,5 +1,6 @@
 package model
 
+import model.user.User
 import play.api.libs.json.{Json, OFormat}
 
 case class Chat(id: Long = 0L, name: String, creator: Long)

@@ -2,7 +2,7 @@ package service
 
 import dto.response.UserResponse
 import dto.{Login, UserCreate}
-import model.User
+import model.user.User
 import org.mindrot.jbcrypt.BCrypt
 import repository.UserRepository
 

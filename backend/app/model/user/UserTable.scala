@@ -1,7 +1,7 @@
-package model
+package model.user
 
-import slick.lifted.{ProvenShape, Tag}
 import slick.jdbc.MySQLProfile.api._
+import slick.lifted.{ProvenShape, Tag}
 
 class UserTable (tag: Tag) extends Table[User](tag, "users"){
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)

@@ -1,6 +1,7 @@
 package repository
 
-import model.{Chat, ChatParticipant, ChatParticipantsTable, ChatTable, ChatWithParticipantCount, ChatWithParticipants, UserTable}
+import model.user.UserTable
+import model.{Chat, ChatParticipant, ChatParticipantsTable, ChatTable, ChatWithParticipantCount, ChatWithParticipants}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
