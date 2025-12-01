@@ -8,8 +8,7 @@ import javax.inject._
 import scala.concurrent.Future
 
 @Singleton
-class MessageRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-                                 (implicit ec: scala.concurrent.ExecutionContext) {
+class MessageRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   import dbConfig._
   import profile.api._

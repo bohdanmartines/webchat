@@ -2,10 +2,11 @@ package actor
 
 import actor.WebSocketProtocol.NewMessage
 import org.apache.pekko.actor.{Actor, ActorRef, Props}
+import repository.MessageRepository
 
 import scala.collection.concurrent.TrieMap
 
-class ChatActor(chatId: Long) extends Actor {
+class ChatActor(chatId: Long, messageRepository: MessageRepository) extends Actor {
   import actor.ChatActor._
 
   private val userActors = TrieMap.empty[Long, Set[ActorRef]]
@@ -42,8 +43,8 @@ object ChatActor {
   case class UserDisconnected(userId: Long, userActor: ActorRef)
   case class IncomingMessage(userId: Long, username: String, content: String)
 
-  def props(chatId: Long): Props = {
-    Props(new ChatActor(chatId))
+  def props(chatId: Long, messageRepository: MessageRepository): Props = {
+    Props(new ChatActor(chatId, messageRepository))
   }
 }
 
