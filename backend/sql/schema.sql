@@ -19,3 +19,14 @@ CREATE TABLE IF NOT EXISTS chat_participants (
     FOREIGN KEY (chat_id) REFERENCES chats (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
+
+CREATE TABLE IF NOT EXISTS message (
+    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
+    chat_id         BIGINT NOT NULL,
+    user_id         BIGINT NOT NULL,
+    content         TEXT NOT NULL,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (chat_id) REFERENCES chats (id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    INDEX (chat_id, created_at DESC)
+);
