@@ -41,3 +41,5 @@
 - Track when a user is connected and disconnected to the chat
 - Broadcast messages to all currently connected participants
 - Add support for a user connected to the chat from multiple tabs
+
+## [v0.4.1] – Persist messages to the database
