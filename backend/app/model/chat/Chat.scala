@@ -1,4 +1,4 @@
-package model
+package model.chat
 
 import model.user.User
 import play.api.libs.json.{Json, OFormat}

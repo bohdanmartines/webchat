@@ -2,7 +2,7 @@ package service
 
 import dto.ChatCreate
 import dto.response.{ChatDetails, ChatSummary, UserResponse}
-import model.Chat
+import model.chat.Chat
 import play.api.libs.json.Json
 import repository.{ChatRepository, UserRepository}
 

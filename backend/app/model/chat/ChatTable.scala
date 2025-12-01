@@ -1,4 +1,4 @@
-package model
+package model.chat
 
 import slick.jdbc.MySQLProfile.api._
 import slick.lifted.{ProvenShape, Tag}
