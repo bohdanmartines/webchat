@@ -51,7 +51,7 @@ class UserActor(out: ActorRef,
       case Some(userId) =>
         val verifyAccessFuture = for {
           userOpt <- userRepository.findById(userId)
-          chatOpt <- chatRepository.findById(userId)
+          chatOpt <- chatRepository.findById(chatId)
           hasAccess <- chatRepository.isUserInChat(chatId, userId)
         } yield (userOpt, chatOpt, hasAccess)
 
