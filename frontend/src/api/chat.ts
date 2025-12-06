@@ -14,3 +14,8 @@ export async function getChat(chatId: number) {
   let response = await http.get('/chat/' + chatId);
   return response.data;
 }
+
+export async function getMessages(chatId: number) {
+  let response = await http.get('/chat/' + chatId + '/message');
+  return response.data;
+}

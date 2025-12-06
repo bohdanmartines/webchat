@@ -29,6 +29,7 @@ function Chat() {
 
   useEffect(() => {
     loadChat();
+    loadMessages();
 
     return () => {
       if (ws?.readyState === WebSocket.OPEN) {
@@ -90,8 +91,11 @@ function Chat() {
     setMessageInput('');
   }
 
-  function loadMessages() {
+  async function loadMessages() {
     // TODO Implement me
+    const messageData = await chatApi.getMessages(chatIdNumber);
+    setMessages(messageData);
+    console.log('Messages loaded:', messageData);
   }
 
   if (!connected) {
