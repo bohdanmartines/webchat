@@ -37,6 +37,7 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
 
   def getMessages(chatId: Long): Action[AnyContent] = securedActionFactory.async { request =>
     println(s"Getting messages for chat $chatId")
-    Future.successful(Ok("Not implemented yet"))
+    chatService.getMessages(chatId, request.userId)
+      .map { msgs => Ok(Json.toJson(msgs))}
   }
 }

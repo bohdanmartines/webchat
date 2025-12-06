@@ -1,6 +1,7 @@
 package actor
 
-import play.api.libs.json.{Format, JsObject, JsValue, Json}
+import dto.response.UserResponse
+import play.api.libs.json.{Format, JsObject, JsValue, Json, OFormat}
 
 import java.time.LocalDateTime
 
@@ -23,6 +24,7 @@ object WebSocketProtocol {
 
   implicit val authenticatedFormat: Format[Authenticated] = Json.format[Authenticated]
   implicit val newMessageFormat: Format[NewMessage] = Json.format[NewMessage]
+  implicit val newMessageOFormat: OFormat[UserResponse] = Json.format[UserResponse]
   implicit val errorFormat: Format[Error] = Json.format[Error]
 
   def parseClientMessage(json: JsValue): Option[ClientMessage] = {
