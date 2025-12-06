@@ -9,7 +9,7 @@ import '../css/Chat.css';
 function Chat() {
 
   const [chat, setChat] = useState<Chat | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [connected, setConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -26,14 +26,13 @@ function Chat() {
 
   async function loadChat() {
     try {
-      setLoading(true);
+      setConnected(false);
       setError(null);
       const chatData = await chatApi.getChat(chatIdNumber);
       setChat(chatData);
+      setConnected(true);
     } catch (err: any) {
       setError(err.message || 'Failed to load chat');
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -46,7 +45,7 @@ function Chat() {
     return chat.name ? chat.name : chat.participants.map(_ => _.username)
   }
 
-  if (loading) {
+  if (!connected) {
     return (
       <div className="chat-page page-container">
         <div className="chat-header">
