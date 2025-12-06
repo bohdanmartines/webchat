@@ -33,6 +33,10 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
         case Some(chat) => Ok(Json.toJson(chat))
         case None => NotFound(Json.obj("error" -> "Chat not found"))
       }
+  }
 
+  def getMessages(chatId: Long): Action[AnyContent] = securedActionFactory.async { request =>
+    println(s"Getting messages for chat $chatId")
+    Future.successful(Ok("Not implemented yet"))
   }
 }

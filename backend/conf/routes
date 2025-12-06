@@ -7,6 +7,7 @@ GET         /api/auth/me              controller.AuthController.me()
 POST        /api/chat                 controller.ChatController.createChat()
 GET         /api/chat                 controller.ChatController.getChats()
 GET         /api/chat/:id             controller.ChatController.getChat(id: Long)
+GET         /api/api/chat/:id/message controller.ChatController.getMessages(id: Long)
 
 # Websocket endpoints
-GET         /ws/chat/:chatId                  controller.ChatWebSocketController.socket(chatId: Long)
+GET         /ws/chat/:chatId          controller.ChatWebSocketController.socket(chatId: Long)
