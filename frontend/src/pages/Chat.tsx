@@ -27,6 +27,8 @@ function Chat() {
   }
   const chatIdNumber = parseInt(chatId, 10);
 
+  const currentUser = localStorage.getItem('username');
+
   useEffect(() => {
     loadChat();
     loadMessages();
@@ -98,6 +100,12 @@ function Chat() {
     console.log('Messages loaded:', messageData);
   }
 
+  function formatTime(timestamp?: string) {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  }
+
   if (!connected) {
     return (
       <div className="chat-page page-container">
@@ -138,7 +146,27 @@ function Chat() {
           <div className="no-messages">
             Messages will appear here
           </div>
-        ) : (messages.map((message, index) => <p key={index}>{message.content}</p>))}
+        ) : (
+          messages.map((message, index) => {
+            const isOwnMessage = message.username === currentUser;
+            return(
+              <div
+                key={message.id || index}
+                className={`message ${isOwnMessage ? 'message-own' : 'message-other'}`}
+              >
+                <div className="message-bubble">
+                  {!isOwnMessage && (
+                    <div className="message-sender">{message.username}</div>
+                  )}
+                  <div className="message-content">{message.content}</div>
+                  <div className="message-time">
+                    {formatTime(message.createdAt)}
+                  </div>
+                </div>
+              </div>
+            )
+          })
+        )}
           </div>
       <div className="input-area">
         <input

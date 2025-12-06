@@ -5,5 +5,5 @@ export interface Message {
   userId: number;
   username: string;
   content: string;
-  timestamp?: string;
+  createdAt?: string;
 }
