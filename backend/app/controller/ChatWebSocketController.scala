@@ -23,6 +23,7 @@ class ChatWebSocketController @Inject()(val cc: ControllerComponents,
                                          ec: ExecutionContext) extends AbstractController(cc) {
 
   def socket(chatId: Long): WebSocket = WebSocket.accept[JsValue, JsValue]{ request =>
+    println(s"New connection for chat $chatId")
     ActorFlow.actorRef(out => {
       UserActor.props(out, chatId, jwtService, userRepository, chatRepository, charManager.getChatActor)
     })

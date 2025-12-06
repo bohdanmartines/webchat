@@ -1,6 +1,8 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 
+import * as webSocketApi from '../api/webSocket'
+
 import type {Chat} from "../types/Chat.ts";
 import * as chatApi from "../api/chat.ts";
 
@@ -9,6 +11,7 @@ import '../css/Chat.css';
 function Chat() {
 
   const [chat, setChat] = useState<Chat | null>(null);
+  const [ws, setWs] = useState<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -22,14 +25,23 @@ function Chat() {
 
   useEffect(() => {
     loadChat();
+
+    return () => {
+      if (ws?.readyState === WebSocket.OPEN) {
+        ws.close();
+      }
+    };
   }, [])
 
   async function loadChat() {
     try {
-      setConnected(false);
       setError(null);
+
       const chatData = await chatApi.getChat(chatIdNumber);
       setChat(chatData);
+
+      const promise = await webSocketApi.connect(chatIdNumber);
+
       setConnected(true);
     } catch (err: any) {
       setError(err.message || 'Failed to load chat');
