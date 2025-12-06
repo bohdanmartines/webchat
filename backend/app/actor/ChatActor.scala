@@ -36,7 +36,7 @@ class ChatActor(chatId: Long, messageRepository: MessageRepository)
     case IncomingMessage(userId, username, content) =>
       messageRepository.create(Message(chatId = chatId, userId = userId, content = content)).foreach { message =>
         userActors.values.foreach(connections =>
-          connections.foreach(_ ! NewMessage(message.id, userId, username, content, message.createdAt))
+          connections.foreach(_ ! NewMessage(message.id, chatId, userId, username, content, message.createdAt))
         )
       }
   }
