@@ -60,6 +60,7 @@ function Chat() {
       }
 
       setConnected(true);
+      setWs(webSocket);
     } catch (err: any) {
       setError(err.message || 'Failed to load chat');
     }
