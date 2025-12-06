@@ -7,6 +7,7 @@ import type {Chat} from "../types/Chat.ts";
 import * as chatApi from "../api/chat.ts";
 
 import '../css/Chat.css';
+import type {Message} from "../types/Message.ts";
 
 function Chat() {
 
@@ -16,6 +17,7 @@ function Chat() {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const [messages, setMessages] = useState<Message[]>([]);
   const [messageInput, setMessageInput] = useState('');
 
   const { chatId } = useParams<{ chatId: string }>();
@@ -88,6 +90,10 @@ function Chat() {
     setMessageInput('');
   }
 
+  function loadMessages() {
+    // TODO Implement me
+  }
+
   if (!connected) {
     return (
       <div className="chat-page page-container">
@@ -124,10 +130,12 @@ function Chat() {
         <span className="chat-title">{getChatDisplayName()}</span>
       </div>
       <div className="messages-area">
-        <div className="no-messages">
-          Messages will appear here
-        </div>
-      </div>
+        {messages.length === 0 ? (
+          <div className="no-messages">
+            Messages will appear here
+          </div>
+        ) : (messages.map((message, index) => <p key={index}>{message.content}</p>))}
+          </div>
       <div className="input-area">
         <input
           type="text"
