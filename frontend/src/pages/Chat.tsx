@@ -16,6 +16,8 @@ function Chat() {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const [messageInput, setMessageInput] = useState('');
+
   const { chatId } = useParams<{ chatId: string }>();
   if (!chatId) {
     navigate('/home');
@@ -75,6 +77,17 @@ function Chat() {
     return chat.name ? chat.name : chat.participants.map(_ => _.username)
   }
 
+  function handleSendMessage() {
+    if (ws?.readyState !== WebSocket.OPEN) {
+      setError('Cannot send message: WebSocket not connected');
+    }
+    ws.send(JSON.stringify({
+      type: 'message',
+      content: messageInput,
+    }));
+    setMessageInput('');
+  }
+
   if (!connected) {
     return (
       <div className="chat-page page-container">
@@ -120,9 +133,14 @@ function Chat() {
           type="text"
           className="message-input"
           placeholder="Type a message..."
-          disabled
+          value={messageInput}
+          onChange={(e) => setMessageInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+          disabled={!connected}
         />
-        <button className="send-button" disabled>
+        <button className="send-button"
+                onClick={handleSendMessage}
+                disabled={!connected || !messageInput.trim()}>
           Send
         </button>
       </div>

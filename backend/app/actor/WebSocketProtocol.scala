@@ -28,7 +28,7 @@ object WebSocketProtocol {
   def parseClientMessage(json: JsValue): Option[ClientMessage] = {
     (json \ MessageTypeField).asOpt[String] match {
       case Some("authenticate") => json.asOpt[Authenticate]
-      case Some("sendMessage") => json.asOpt[SendMessage]
+      case Some("message") => json.asOpt[SendMessage]
       case _ =>
         println("Message type not recognized")
         None
