@@ -51,7 +51,11 @@ function Chat() {
 
       webSocket.onmessage = (event) => {
         const message = JSON.parse(event.data);
-        console.log('Message received: ', message);
+        switch (message.type) {
+          case 'newMessage':
+            setMessages(prev => [...prev, message]);
+            console.log('Message added to message list: ', message);
+        }
       }
 
       webSocket.onerror = (event) => {
