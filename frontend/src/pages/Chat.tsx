@@ -40,7 +40,24 @@ function Chat() {
       const chatData = await chatApi.getChat(chatIdNumber);
       setChat(chatData);
 
-      const promise = await webSocketApi.connect(chatIdNumber);
+      const webSocket = await webSocketApi.connect(chatIdNumber);
+
+      webSocket.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        console.log('Message received: ', message);
+      }
+
+      webSocket.onerror = (event) => {
+        const error = JSON.parse(event.data);
+        setError(error)
+        setConnected(false)
+        console.log('WebSocket error: ', error);
+      }
+
+      webSocket.onclose = () => {
+        setConnected(false);
+        console.log('WebSocket closed');
+      }
 
       setConnected(true);
     } catch (err: any) {
