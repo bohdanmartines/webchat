@@ -43,3 +43,8 @@
 - Add support for a user connected to the chat from multiple tabs
 
 ## [v0.4.1] – Persist messages to the database
+
+## [v0.5.0] – Implement real-time message broadcasting
+- Integrate the frontend with backend websocket endpoint
+- Enable message area and message input when connection is established
+- Display inbound messages and adjust the scroll 
