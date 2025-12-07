@@ -1,11 +1,14 @@
 package model.message
 
+import model.CustomColumnTypes
 import slick.jdbc.MySQLProfile.api._
 import slick.lifted.{ProvenShape, Tag}
 
+import java.sql.Timestamp
 import java.time.LocalDateTime
 
-class MessageTable (tag: Tag) extends Table[Message](tag, "messages") {
+class MessageTable (tag: Tag) extends Table[Message](tag, "messages") with CustomColumnTypes {
+
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def chatId = column[Long]("chat_id")
   def userId = column[Long]("user_id")

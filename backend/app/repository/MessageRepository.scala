@@ -6,7 +6,6 @@ import model.user.UserTable
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
-import java.time.LocalDateTime
 import javax.inject._
 import scala.concurrent.Future
 
@@ -29,7 +28,7 @@ class MessageRepository @Inject()(protected val dbConfigProvider: DatabaseConfig
     val query = for {
       message <- messages if message.chatId === chatId
       user <- users if user.id === message.userId
-    } yield (message.id, message.chatId, message.userId, user.username, message.content, LocalDateTime.now()) // TODO Fix mapping sql Timestamp -> LocalDateTime
+    } yield (message.id, message.chatId, message.userId, user.username, message.content, message.createdAt)
 
     db.run(query.sortBy(_._6)
       .drop(offset)
