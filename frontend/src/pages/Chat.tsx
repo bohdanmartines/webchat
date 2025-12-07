@@ -32,6 +32,10 @@ function Chat() {
 
   useEffect(() => {
     loadChat();
+  }, [])
+
+  useEffect(() => {
+    connectToSocket();
 
     return () => {
       if (ws?.readyState === WebSocket.OPEN) {
@@ -56,10 +60,17 @@ function Chat() {
   async function loadChat() {
     try {
       setError(null);
-
       const chatData = await chatApi.getChat(chatIdNumber);
       setChat(chatData);
 
+    } catch (err: any) {
+      setError(err.message || 'Failed to load chat');
+    }
+  }
+
+  async function connectToSocket() {
+    try {
+      setError(null);
       const webSocket = await webSocketApi.connect(chatIdNumber);
 
       webSocket.onmessage = (event) => {
