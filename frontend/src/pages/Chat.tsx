@@ -32,13 +32,16 @@ function Chat() {
 
   useEffect(() => {
     loadChat();
-    loadMessages();
 
     return () => {
       if (ws?.readyState === WebSocket.OPEN) {
         ws.close();
       }
     };
+  }, [])
+
+  useEffect(() => {
+    loadMessages();
   }, [])
 
   useEffect(() => {
