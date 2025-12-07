@@ -1,5 +1,5 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 import * as webSocketApi from '../api/webSocket'
 
@@ -19,6 +19,7 @@ function Chat() {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageInput, setMessageInput] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { chatId } = useParams<{ chatId: string }>();
   if (!chatId) {
@@ -39,6 +40,10 @@ function Chat() {
       }
     };
   }, [])
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   async function loadChat() {
     try {
@@ -98,10 +103,14 @@ function Chat() {
   }
 
   async function loadMessages() {
-    // TODO Implement me
     const messageData = await chatApi.getMessages(chatIdNumber);
     setMessages(messageData);
     console.log('Messages loaded:', messageData);
+  }
+
+  function scrollToBottom() {
+    console.log('scrolling to bottom');
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   function formatTime(timestamp?: string) {
@@ -173,7 +182,7 @@ function Chat() {
         ) : (
           messages.map((message, index) => {
             const isOwnMessage = message.username === currentUser;
-            return(
+            return (
               <div
                 key={message.id || index}
                 className={`message ${isOwnMessage ? 'message-own' : 'message-other'}`}
@@ -191,7 +200,8 @@ function Chat() {
             )
           })
         )}
-          </div>
+        <div ref={messagesEndRef}/>
+      </div>
       <div className="input-area">
         <input
           type="text"
