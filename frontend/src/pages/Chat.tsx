@@ -102,6 +102,9 @@ function Chat() {
   }
 
   function handleBack() {
+    if (ws?.readyState === WebSocket.OPEN) {
+      ws.close();
+    }
     navigate('/home');
   }
 
