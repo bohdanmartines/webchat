@@ -43,6 +43,11 @@ function Chat() {
 
   useEffect(() => {
     scrollToBottom();
+
+    // correction scroll after layout settling
+    setTimeout(() => {
+      scrollToBottom();
+    }, 50);
   }, [messages]);
 
   async function loadChat() {
