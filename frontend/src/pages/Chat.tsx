@@ -12,13 +12,14 @@ import type {Message} from "../types/Message.ts";
 function Chat() {
 
   const [chat, setChat] = useState<Chat | null>(null);
-  const [ws, setWs] = useState<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageInput, setMessageInput] = useState('');
+
+  const wsRef = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { chatId } = useParams<{ chatId: string }>();
@@ -35,11 +36,15 @@ function Chat() {
   }, [])
 
   useEffect(() => {
-    connectToSocket();
+    if (wsRef.current) return;
+
+    const webSocket = webSocketApi.connect(chatIdNumber);
+    wsRef.current = webSocket;
+    connectToSocket(webSocket);
 
     return () => {
-      if (ws?.readyState === WebSocket.OPEN) {
-        ws.close();
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.close();
       }
     };
   }, [])
@@ -68,10 +73,9 @@ function Chat() {
     }
   }
 
-  async function connectToSocket() {
+  async function connectToSocket(webSocket: WebSocket) {
     try {
       setError(null);
-      const webSocket = await webSocketApi.connect(chatIdNumber);
 
       webSocket.onmessage = (event) => {
         const message = JSON.parse(event.data);
@@ -95,15 +99,14 @@ function Chat() {
       }
 
       setConnected(true);
-      setWs(webSocket);
     } catch (err: any) {
       setError(err.message || 'Failed to load chat');
     }
   }
 
   function handleBack() {
-    if (ws?.readyState === WebSocket.OPEN) {
-      ws.close();
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.close();
     }
     navigate('/home');
   }
@@ -114,10 +117,11 @@ function Chat() {
   }
 
   function handleSendMessage() {
-    if (ws?.readyState !== WebSocket.OPEN) {
+    if (wsRef.current?.readyState !== WebSocket.OPEN) {
       setError('Cannot send message: WebSocket not connected');
+      return;
     }
-    ws.send(JSON.stringify({
+    wsRef.current.send(JSON.stringify({
       type: 'message',
       content: messageInput,
     }));

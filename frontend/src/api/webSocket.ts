@@ -1,6 +1,6 @@
 const BASE = import.meta.env.VITE_WS_BASE || '/ws/chat'
 
-export async function connect(chatId: number) {
+export function connect(chatId: number) {
   console.log('Connecting to WebSocket with base:', BASE);
   const webSocket = new WebSocket(BASE + '/' + chatId);
 
