@@ -105,10 +105,12 @@ function Chat() {
       }
 
       webSocket.onerror = (event) => {
-        const error = JSON.parse(event.data);
-        setError(error)
+        if (event && event.data) {
+          const error = JSON.parse(event.data);
+          setError(error)
+          console.log('WebSocket error: ', error);
+        }
         setConnected(false)
-        console.log('WebSocket error: ', error);
       }
 
       webSocket.onclose = () => {
