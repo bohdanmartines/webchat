@@ -47,4 +47,7 @@
 ## [v0.5.0] – Implement UI for real-time message broadcasting
 - Integrate the frontend with backend websocket endpoint
 - Enable message area and message input when connection is established
-- Display inbound messages and adjust the scroll 
+- Display inbound messages and adjust the scroll
+
+## [v0.5.1] – Implement Web Socket automatic reconnection
+- Send heartbeat messages to the backend while the user keeps the chat open
