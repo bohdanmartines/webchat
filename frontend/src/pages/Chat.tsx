@@ -43,16 +43,15 @@ function Chat() {
     configureWebSocket(webSocket);
 
     const interval = setInterval(
-      () => console.log('We will send heartbeat messages here'),
-      2000
+      () => {
+        webSocket.send(JSON.stringify({type: 'heartbeat'}));
+      }, 60000
     );
-    console.log('Intercal created: ', interval)
 
     return () => {
       wsRef.current?.close();
       wsRef.current = null;
       clearInterval(interval);
-      console.log('Intercal cleared: ', interval)
     };
   }, [])
 
