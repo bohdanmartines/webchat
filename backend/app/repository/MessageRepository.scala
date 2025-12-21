@@ -30,11 +30,11 @@ class MessageRepository @Inject()(protected val dbConfigProvider: DatabaseConfig
       user <- users if user.id === message.userId
     } yield (message.id, message.chatId, message.userId, user.username, message.content, message.createdAt)
 
-    db.run(query.sortBy(_._6)
+    db.run(query.sortBy(_._6.desc)
       .drop(offset)
       .take(limit)
       .result
-    ).map(_.map {
+    ).map(_.reverse.map {
       case (id, chatId, userId, username, content, createdAt) =>
         NewMessage(id, chatId, userId, username, content, createdAt)
     })
