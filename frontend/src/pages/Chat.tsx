@@ -86,6 +86,7 @@ function Chat() {
           token: token
         }));
         console.log('Sent authentication message');
+        setConnected(true);
       }
 
       webSocket.onmessage = (event) => {
@@ -108,8 +109,6 @@ function Chat() {
         setConnected(false);
         console.log('WebSocket closed');
       }
-
-      setConnected(true);
     } catch (err: any) {
       setError(err.message || 'Failed to load chat');
     }
