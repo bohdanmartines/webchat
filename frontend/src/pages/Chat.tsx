@@ -42,10 +42,17 @@ function Chat() {
     wsRef.current = webSocket;
     configureWebSocket(webSocket);
 
+    const interval = setInterval(
+      () => console.log('We will send heartbeat messages here'),
+      2000
+    );
+    console.log('Intercal created: ', interval)
+
     return () => {
-      if (wsRef.current?.readyState === WebSocket.OPEN) {
-        wsRef.current.close();
-      }
+      wsRef.current?.close();
+      wsRef.current = null;
+      clearInterval(interval);
+      console.log('Intercal cleared: ', interval)
     };
   }, [])
 
