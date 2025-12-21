@@ -40,7 +40,7 @@ function Chat() {
 
     const webSocket = webSocketApi.connect(chatIdNumber);
     wsRef.current = webSocket;
-    connectToSocket(webSocket);
+    configureWebSocket(webSocket);
 
     return () => {
       if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -73,9 +73,20 @@ function Chat() {
     }
   }
 
-  async function connectToSocket(webSocket: WebSocket) {
+  async function configureWebSocket(webSocket: WebSocket) {
     try {
       setError(null);
+
+      webSocket.onopen = () => {
+        console.log('WebSocket connected');
+
+        const token = localStorage.getItem('token')
+        webSocket.send(JSON.stringify({
+          type: 'authenticate',
+          token: token
+        }));
+        console.log('Sent authentication message');
+      }
 
       webSocket.onmessage = (event) => {
         const message = JSON.parse(event.data);
