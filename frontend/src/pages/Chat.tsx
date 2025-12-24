@@ -3,11 +3,12 @@ import {useEffect, useRef, useState} from "react";
 
 import * as webSocketApi from '../api/webSocket'
 
-import type {Chat} from "../types/Chat.ts";
+import {type Chat, getChatDisplayName} from "../types/Chat.ts";
 import * as chatApi from "../api/chat.ts";
 
 import '../css/Chat.css';
 import type {Message} from "../types/Message.ts";
+import ChatDetailsModal from "./ChatDetailsModal.tsx";
 
 function Chat() {
 
@@ -18,6 +19,8 @@ function Chat() {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageInput, setMessageInput] = useState('');
+
+  const [modalOpen, setModalOpen] = useState(false)
 
   const wsRef = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -129,11 +132,6 @@ function Chat() {
     navigate('/home');
   }
 
-  function getChatDisplayName() {
-    if (!chat) return '';
-    return chat.name ? chat.name : chat.participants.map(_ => _.username)
-  }
-
   function handleSendMessage() {
     if (wsRef.current?.readyState !== WebSocket.OPEN) {
       setError('Cannot send message: WebSocket not connected');
@@ -211,57 +209,70 @@ function Chat() {
   }
 
   return (
-    <div className="chat-page page-container">
-      <div className="chat-header">
-        <button className="back-button" onClick={handleBack}>
-          ←
-        </button>
-        <span className="chat-title">{getChatDisplayName()}</span>
-      </div>
-      <div className="messages-area">
-        {messages.length === 0 ? (
-          <div className="no-messages">
-            Messages will appear here
-          </div>
-        ) : (
-          messages.map((message, index) => {
-            const isOwnMessage = message.username === currentUser;
-            return (
-              <div
-                key={message.id || index}
-                className={`message ${isOwnMessage ? 'message-own' : 'message-other'}`}
-              >
-                <div className="message-bubble">
-                  {!isOwnMessage && (
-                    <div className="message-sender">{message.username}</div>
-                  )}
-                  <div className="message-content">{message.content}</div>
-                  <div className="message-time">
-                    {formatTime(message.createdAt)}
+    <div>
+      <main className="chat-page page-container">
+        <div className="chat-header">
+          <button className="back-button" onClick={handleBack}>
+            ←
+          </button>
+          <span className="chat-title">{getChatDisplayName(chat)}</span>
+          <button
+            className="btn-new-chat"
+            onClick={() => setModalOpen(true)}
+          >
+            Details
+          </button>
+        </div>
+        <div className="messages-area">
+          {messages.length === 0 ? (
+            <div className="no-messages">
+              Messages will appear here
+            </div>
+          ) : (
+            messages.map((message, index) => {
+              const isOwnMessage = message.username === currentUser;
+              return (
+                <div
+                  key={message.id || index}
+                  className={`message ${isOwnMessage ? 'message-own' : 'message-other'}`}
+                >
+                  <div className="message-bubble">
+                    {!isOwnMessage && (
+                      <div className="message-sender">{message.username}</div>
+                    )}
+                    <div className="message-content">{message.content}</div>
+                    <div className="message-time">
+                      {formatTime(message.createdAt)}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-          })
-        )}
-        <div ref={messagesEndRef}/>
-      </div>
-      <div className="input-area">
-        <input
-          type="text"
-          className="message-input"
-          placeholder="Type a message..."
-          value={messageInput}
-          onChange={(e) => setMessageInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-          disabled={!connected}
-        />
-        <button className="send-button"
-                onClick={handleSendMessage}
-                disabled={!connected || !messageInput.trim()}>
-          Send
-        </button>
-      </div>
+              )
+            })
+          )}
+          <div ref={messagesEndRef}/>
+        </div>
+        <div className="input-area">
+          <input
+            type="text"
+            className="message-input"
+            placeholder="Type a message..."
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+            disabled={!connected}
+          />
+          <button className="send-button"
+                  onClick={handleSendMessage}
+                  disabled={!connected || !messageInput.trim()}>
+            Send
+          </button>
+        </div>
+      </main>
+      <ChatDetailsModal
+        chat={chat}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
     </div>
   )
 }
