@@ -27,7 +27,7 @@ class ChatService @Inject()(repository: ChatRepository, messageRepository: Messa
   def getChat(chatId: Long, userId: Long): Future[Option[ChatDetails]] = {
     repository.isUserInChat(chatId, userId)
       .flatMap {
-        case true => repository.findByIdAndUser(chatId)
+        case true => repository.findDetailsById(chatId)
           .map(_.map(c => ChatDetails(
             c.id,
             c.name,
