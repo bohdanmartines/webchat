@@ -43,4 +43,8 @@ class ChatService @Inject()(repository: ChatRepository, messageRepository: Messa
         case false => Future.successful(List.empty)
       }
   }
+
+  def addParticipant(chatId: Long, userId: Long): Future[Unit] = {
+    Future.successful(())
+  }
 }
