@@ -45,11 +45,9 @@ class ChatService @Inject()(repository: ChatRepository, messageRepository: Messa
       }
   }
 
-  def addParticipant(chatId: Long, ownerId: Long, userIdToAdd: Long): Future[Unit] = {
-    repository.isChatOwner(chatId, ownerId).map {
-      case true => repository.isUserInChat(chatId, userIdToAdd).map {
-        case false => repository.addParticipant(chatId, userIdToAdd)
-      }
+  def addParticipant(chatId: Long, userIdToAdd: Long): Future[Unit] = {
+    repository.isUserInChat(chatId, userIdToAdd).map {
+      case false => Right(repository.addParticipant(chatId, userIdToAdd))
     }
   }
 }

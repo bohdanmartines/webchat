@@ -3,6 +3,7 @@ package controller
 import dto.ChatCreate
 import play.api.libs.json.Json
 import play.api.mvc._
+import repository.ChatRepository
 import service.ChatService
 
 import javax.inject._
@@ -10,7 +11,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ChatController @Inject()(val controllerComponents: ControllerComponents,
-                              chatService: ChatService,
+                               chatService: ChatService,
+                               chatRepository: ChatRepository,
                                securedActionFactory: SecuredAction)
                               (implicit ec: ExecutionContext) extends BaseController {
 
@@ -43,7 +45,10 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
 
   def addParticipant(chatId: Long, userId: Long): Action[AnyContent] = securedActionFactory.async { request =>
     println(s"Adding user $userId to chat $chatId")
-    chatService.addParticipant(chatId, request.userId, userId)
-      .map { _ => Ok}
+    chatRepository.isChatOwner(chatId, request.userId).flatMap {
+      case true => chatService.addParticipant(chatId, userId).map { _ => Ok}
+      case false => Future.successful(Forbidden("You are not chat owner"))
+    }
+
   }
 }
