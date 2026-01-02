@@ -4,7 +4,9 @@ import {useState} from "react";
 
 function ChatDetailsModal({chat, isOpen, onClose}) {
 
+  const [newUsername, setNewUsername] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const isCreator = chat.ownerUsername === localStorage.getItem('username');
 
@@ -13,6 +15,17 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
       onClose();
     }
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !loading) {
+      handleAddParticipant(newUsername.trim());
+    }
+  };
+
+  const handleAddParticipant = async () => {
+    // TODO Implement me
+    console.log('Add participant ' + newUsername);
+  }
 
   const handleRemoveParticipant = async (username: string) => {
   // TODO Implement me
@@ -79,6 +92,30 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
               })}
             </div>
           </div>
+
+          {isCreator && (
+            <div className="modal-section">
+              <label className="modal-label">Add Participant</label>
+              <div className="add-participant-container">
+                <input
+                  type="text"
+                  className="add-participant-input"
+                  placeholder="Enter username..."
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  disabled={loading}
+                />
+                <button
+                  className="add-participant-button"
+                  onClick={() => handleAddParticipant()}
+                  disabled={loading || !newUsername.trim()}
+                >
+                  {loading ? 'Adding...' : 'Add'}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
