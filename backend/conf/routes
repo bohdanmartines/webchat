@@ -9,6 +9,7 @@ GET         /api/chat                         controller.ChatController.getChats
 GET         /api/chat/:id                     controller.ChatController.getChat(id: Long)
 GET         /api/chat/:id/message             controller.ChatController.getMessages(id: Long)
 PUT         /api/chat/:id/user/:userId        controller.ChatController.addParticipant(id: Long, userId: Long)
+DELETE      /api/chat/:id/user/:userId        controller.ChatController.removeParticipant(id: Long, userId: Long)
 
 # Websocket endpoints
 GET         /ws/chat/:chatId                  controller.ChatWebSocketController.socket(chatId: Long)
