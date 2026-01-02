@@ -42,6 +42,26 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
               Participants ({chat.participants.length})
             </label>
           </div>
+
+          <div className="participants-list">
+            {chat.participants.map((participant) => {
+              const isChatOwner = true; // TODO check if the user is creator
+
+              return (
+                <div key={participant.username} className="participant-item">
+                  <div className="participant-info">
+                    <span className="participant-icon">👤</span>
+                    <span className="participant-username">
+                        {participant.username}
+                      {isChatOwner && (
+                        <span className="creator-badge"> (Creator)</span>
+                      )}
+                      </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

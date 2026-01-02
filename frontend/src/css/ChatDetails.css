@@ -89,3 +89,18 @@
     font-size: 1rem;
     color: #333;
 }
+
+.participant-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.participant-icon {
+    font-size: 1.2rem;
+}
+
+.participant-username {
+    font-size: 1rem;
+    color: #333;
+}
