@@ -38,7 +38,7 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
     <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-content">
         <div className="modal-header">
-          <h2>Chat Information</h2>
+          <span className="chat-title">{getChatDisplayName(chat)}</span>
           <button className="modal-close" onClick={onClose} aria-label="Close">
             ✕
           </button>
@@ -50,11 +50,6 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
               {error}
             </div>
           )}
-
-          <div className="modal-section">
-            <label className="modal-label">Chat Name</label>
-            <div className="chat-name-display">{getChatDisplayName(chat)}</div>
-          </div>
 
           <div className="modal-section">
             <label className="modal-label">

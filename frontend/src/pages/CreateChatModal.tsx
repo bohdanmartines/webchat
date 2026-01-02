@@ -46,7 +46,7 @@ function CreateChatModal({ isOpen, onClose, onSave }) {
     <div className="modal-backdrop" onClick={handleBackdropClick}>
       <div className="modal-content">
         <div className="modal-header">
-          <h2>Create New Chat</h2>
+          <h3>Create New Chat</h3>
           <button className="close-btn" onClick={handleClose}>×</button>
         </div>
 
