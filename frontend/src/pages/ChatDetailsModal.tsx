@@ -1,17 +1,23 @@
 import '../css/ChatDetails.css';
 import {getChatDisplayName} from "../types/Chat.ts";
-import type {User} from "../types/User.ts";
 import {useState} from "react";
 
 function ChatDetailsModal({chat, isOpen, onClose}) {
 
   const [error, setError] = useState<string | null>(null);
 
+  const isCreator = chat.ownerUsername === localStorage.getItem('username');
+
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
+
+  const handleRemoveParticipant = async (username: string) => {
+  // TODO Implement me
+    console.log('Remove participant ' + username);
+  }
 
   if (!isOpen) return null;
 
@@ -45,7 +51,8 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
 
           <div className="participants-list">
             {chat.participants.map((participant) => {
-              const isChatOwner = participant.id === chat.ownerId;
+              const isParticipantOwner = participant.id === chat.ownerId;
+              const canRemove = isCreator && !isParticipantOwner;
 
               return (
                 <div key={participant.username} className="participant-item">
@@ -53,10 +60,19 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
                     <span className="participant-icon">👤</span>
                     <span className="participant-username">
                         {participant.username}
-                      {isChatOwner && (
+                      {isParticipantOwner && (
                         <span className="creator-badge"> (Owner)</span>
                       )}
                       </span>
+                    {canRemove && (
+                      <button
+                        className="remove-button"
+                        onClick={() => handleRemoveParticipant(participant.username)}
+                        aria-label={`Remove ${participant.username}`}
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
                 </div>
               );

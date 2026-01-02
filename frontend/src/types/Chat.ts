@@ -4,7 +4,7 @@ export interface Chat {
   id: number;
   name: string | null;
   ownerId: number;
-  ownerName: string;
+  ownerUsername: string;
   participants: User[];
 }
 
