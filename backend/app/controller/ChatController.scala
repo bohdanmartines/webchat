@@ -40,4 +40,9 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
     chatService.getMessages(chatId, request.userId)
       .map { msgs => Ok(Json.toJson(msgs))}
   }
+
+  def addParticipant(chatId: Long, userId: Long): Action[AnyContent] = securedActionFactory.async { request =>
+    println(s"Adding user $userId to chat $chatId")
+    Future.successful(Ok)
+  }
 }

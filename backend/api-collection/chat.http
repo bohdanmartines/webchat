@@ -16,3 +16,7 @@ Authorization: Bearer place_token_here
 ### Get chat details by ID
 GET {{baseUrl}}/api/chat/1
 Authorization: Bearer place_token_here
+
+### Add user to a chat
+PUT {{baseUrl}}/api/chat/1/user/3
+Authorization: Bearer place_token_here

@@ -1,13 +1,14 @@
 # Auth endpoints
-POST        /api/auth/register        controller.AuthController.register()
-POST        /api/auth/login           controller.AuthController.login()
-GET         /api/auth/me              controller.AuthController.me()
+POST        /api/auth/register                controller.AuthController.register()
+POST        /api/auth/login                   controller.AuthController.login()
+GET         /api/auth/me                      controller.AuthController.me()
 
 # Chat endpoints
-POST        /api/chat                 controller.ChatController.createChat()
-GET         /api/chat                 controller.ChatController.getChats()
-GET         /api/chat/:id             controller.ChatController.getChat(id: Long)
-GET         /api/chat/:id/message     controller.ChatController.getMessages(id: Long)
+POST        /api/chat                         controller.ChatController.createChat()
+GET         /api/chat                         controller.ChatController.getChats()
+GET         /api/chat/:id                     controller.ChatController.getChat(id: Long)
+GET         /api/chat/:id/message             controller.ChatController.getMessages(id: Long)
+PUT         /api/chat/:id/user/:userId        controller.ChatController.addParticipant(id: Long, userId: Long)
 
 # Websocket endpoints
-GET         /ws/chat/:chatId          controller.ChatWebSocketController.socket(chatId: Long)
+GET         /ws/chat/:chatId                  controller.ChatWebSocketController.socket(chatId: Long)
