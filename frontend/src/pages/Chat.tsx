@@ -217,7 +217,7 @@ function Chat() {
           </button>
           <span className="chat-title">{getChatDisplayName(chat)}</span>
           <button
-            className="btn-new-chat"
+            className="details-button"
             onClick={() => setModalOpen(true)}
           >
             Details

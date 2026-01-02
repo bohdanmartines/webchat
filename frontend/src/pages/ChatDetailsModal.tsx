@@ -1,37 +1,47 @@
 import '../css/ChatDetails.css';
 import {getChatDisplayName} from "../types/Chat.ts";
 import type {User} from "../types/User.ts";
+import {useState} from "react";
 
 function ChatDetailsModal({chat, isOpen, onClose}) {
 
-  function handleClose() {
-    onClose();
-  }
+  const [error, setError] = useState<string | null>(null);
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-backdrop">
+    <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-content">
         <div className="modal-header">
-          <span className="chat-title">{getChatDisplayName(chat)}</span>
-          <button className="close-btn" onClick={handleClose}>×</button>
+          <h2>Chat Information</h2>
+          <button className="modal-close" onClick={onClose} aria-label="Close">
+            ✕
+          </button>
         </div>
+
         <div className="modal-body">
-          <p>{chat.participants.length} participant(s)</p>
+          {error && (
+            <div className="modal-error">
+              {error}
+            </div>
+          )}
 
-          <p>Add a participant</p>
-          <input type="text" placeholder="Participant username"/>
+          <div className="modal-section">
+            <label className="modal-label">Chat Name</label>
+            <div className="chat-name-display">{getChatDisplayName(chat)}</div>
+          </div>
 
-          {
-            chat.participants.map((participant: User) =>
-              <div
-                key={participant.id}
-                className="participant-item">
-                <p>{participant.username}</p>
-              </div>
-            )
-          }
+          <div className="modal-section">
+            <label className="modal-label">
+              Participants ({chat.participants.length})
+            </label>
+          </div>
         </div>
       </div>
     </div>
