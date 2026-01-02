@@ -8,6 +8,7 @@ import repository.{ChatRepository, MessageRepository}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Success
 
 @Singleton
 class ChatService @Inject()(repository: ChatRepository, messageRepository: MessageRepository)
@@ -44,7 +45,13 @@ class ChatService @Inject()(repository: ChatRepository, messageRepository: Messa
       }
   }
 
-  def addParticipant(chatId: Long, userId: Long): Future[Unit] = {
+  def addParticipant(chatId: Long, ownerId: Long, userIdToAdd: Long): Future[Unit] = {
+    repository.isChatOwner(chatId, ownerId)
+      .onComplete {
+        case Success(result) =>
+          println(s"User $ownerId (owner: $result) adding user $userIdToAdd to chat $chatId")
+
+      }
     Future.successful(())
   }
 }

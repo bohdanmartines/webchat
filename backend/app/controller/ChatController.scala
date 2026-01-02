@@ -43,7 +43,7 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
 
   def addParticipant(chatId: Long, userId: Long): Action[AnyContent] = securedActionFactory.async { request =>
     println(s"Adding user $userId to chat $chatId")
-    chatService.addParticipant(chatId, userId)
+    chatService.addParticipant(chatId, request.userId, userId)
       .map { _ => Ok}
   }
 }
