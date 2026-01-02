@@ -78,4 +78,10 @@ class ChatRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     }
     db.run(action)
   }
+
+  def addParticipant(chatId: Long, userId: Long): Future[Unit] = {
+    val insert = chatParticipants += ChatParticipant(chatId = chatId, userId = userId)
+    db.run(insert)
+    Future.successful(())
+  }
 }
