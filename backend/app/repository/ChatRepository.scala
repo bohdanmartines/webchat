@@ -81,7 +81,11 @@ class ChatRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
 
   def addParticipant(chatId: Long, userId: Long): Future[Unit] = {
     val insert = chatParticipants += ChatParticipant(chatId = chatId, userId = userId)
-    db.run(insert)
-    Future.successful(())
+    db.run(insert).map(_ => ())
+  }
+
+  def removeParticipant(chatId: Long, userId: Long): Future[Unit] = {
+    val delete = chatParticipants.filter(_.chatId === chatId).filter(_.userId === userId).delete
+    db.run(delete).map(_ => ())
   }
 }

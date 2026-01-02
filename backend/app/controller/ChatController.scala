@@ -53,6 +53,9 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
 
   def removeParticipant(chatId: Long, userId: Long): Action[AnyContent] = securedActionFactory.async { request =>
     println(s"Removing user $userId from chat $chatId")
-    Future.successful(Ok)
+    chatRepository.isChatOwner(chatId, request.userId).flatMap {
+      case true => chatService.removeParticipant(chatId, userId).map { _ => Ok}
+      case false => Future.successful(Forbidden("You are not chat owner"))
+    }
   }
 }

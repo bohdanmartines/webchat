@@ -45,10 +45,17 @@ class ChatService @Inject()(repository: ChatRepository, messageRepository: Messa
       }
   }
 
-  def addParticipant(chatId: Long, userIdToAdd: Long): Future[Unit] = {
-    repository.isUserInChat(chatId, userIdToAdd).flatMap {
-      case false => repository.addParticipant(chatId, userIdToAdd)
+  def addParticipant(chatId: Long, userId: Long): Future[Unit] = {
+    repository.isUserInChat(chatId, userId).flatMap {
+      case false => repository.addParticipant(chatId, userId)
       case true => Future.successful()
+    }
+  }
+
+  def removeParticipant(chatId: Long, userId: Long): Future[Unit] = {
+    repository.isUserInChat(chatId, userId).flatMap {
+      case true => repository.removeParticipant(chatId, userId)
+      case false => Future.successful()
     }
   }
 }
