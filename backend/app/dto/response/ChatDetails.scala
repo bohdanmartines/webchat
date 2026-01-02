@@ -2,7 +2,7 @@ package dto.response
 
 import play.api.libs.json.{Json, OFormat}
 
-case class ChatDetails(id: Long, name: String, participants: Seq[UserResponse])
+case class ChatDetails(id: Long, name: String, ownerId: Long, participants: Seq[UserResponse])
 
 object ChatDetails {
   implicit val fmt: OFormat[ChatDetails] = Json.format[ChatDetails]

@@ -31,6 +31,7 @@ class ChatService @Inject()(repository: ChatRepository, messageRepository: Messa
           .map(_.map(c => ChatDetails(
             c.id,
             c.name,
+            c.creator,
             c.participants.map(user => UserResponse(user.id, user.username))
           )))
         case false => Future.successful(None)

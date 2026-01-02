@@ -45,7 +45,7 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
 
           <div className="participants-list">
             {chat.participants.map((participant) => {
-              const isChatOwner = true; // TODO check if the user is creator
+              const isChatOwner = participant.id === chat.ownerId;
 
               return (
                 <div key={participant.username} className="participant-item">
@@ -54,7 +54,7 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
                     <span className="participant-username">
                         {participant.username}
                       {isChatOwner && (
-                        <span className="creator-badge"> (Creator)</span>
+                        <span className="creator-badge"> (Owner)</span>
                       )}
                       </span>
                   </div>
