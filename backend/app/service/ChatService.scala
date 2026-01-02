@@ -28,12 +28,18 @@ class ChatService @Inject()(repository: ChatRepository, messageRepository: Messa
     repository.isUserInChat(chatId, userId)
       .flatMap {
         case true => repository.findDetailsById(chatId)
-          .map(_.map(c => ChatDetails(
-            c.id,
-            c.name,
-            c.creator,
-            c.participants.map(user => UserResponse(user.id, user.username))
-          )))
+          .map(_.map(c => {
+            val participants = c.participants.map(user => UserResponse(user.id, user.username))
+            val creatorName = participants.find(u => u.id == c.creator)
+              .fold("")(o => o.username)
+            ChatDetails(
+              c.id,
+              c.name,
+              c.creator,
+              creatorName,
+              participants
+            )
+          }))
         case false => Future.successful(None)
       }
   }
