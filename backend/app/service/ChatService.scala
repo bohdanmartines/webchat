@@ -46,8 +46,9 @@ class ChatService @Inject()(repository: ChatRepository, messageRepository: Messa
   }
 
   def addParticipant(chatId: Long, userIdToAdd: Long): Future[Unit] = {
-    repository.isUserInChat(chatId, userIdToAdd).map {
-      case false => Right(repository.addParticipant(chatId, userIdToAdd))
+    repository.isUserInChat(chatId, userIdToAdd).flatMap {
+      case false => repository.addParticipant(chatId, userIdToAdd)
+      case true => Future.successful()
     }
   }
 }

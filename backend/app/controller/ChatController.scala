@@ -49,6 +49,5 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
       case true => chatService.addParticipant(chatId, userId).map { _ => Ok}
       case false => Future.successful(Forbidden("You are not chat owner"))
     }
-
   }
 }
