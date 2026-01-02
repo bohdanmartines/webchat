@@ -47,36 +47,37 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
             <label className="modal-label">
               Participants ({chat.participants.length})
             </label>
-          </div>
 
-          <div className="participants-list">
-            {chat.participants.map((participant) => {
-              const isParticipantOwner = participant.id === chat.ownerId;
-              const canRemove = isCreator && !isParticipantOwner;
+            <div className="participants-list">
+              {chat.participants.map((participant) => {
+                const isParticipantOwner = participant.id === chat.ownerId;
+                const canRemove = isCreator && !isParticipantOwner;
 
-              return (
-                <div key={participant.username} className="participant-item">
-                  <div className="participant-info">
-                    <span className="participant-icon">👤</span>
-                    <span className="participant-username">
+                return (
+                  <div key={participant.username} className="participant-item">
+                    <div className="participant-info">
+                      <span className="participant-icon">👤</span>
+                      <span className="participant-username">
                         {participant.username}
-                      {isParticipantOwner && (
-                        <span className="creator-badge"> (Owner)</span>
-                      )}
+                        {isParticipantOwner && (
+                          <span className="creator-badge"> (Owner)</span>
+                        )}
                       </span>
-                    {canRemove && (
-                      <button
-                        className="remove-button"
-                        onClick={() => handleRemoveParticipant(participant.username)}
-                        aria-label={`Remove ${participant.username}`}
-                      >
-                        ✕
-                      </button>
-                    )}
+
+                      {canRemove && (
+                        <button
+                          className="remove-button"
+                          onClick={() => handleRemoveParticipant(participant.username)}
+                          aria-label={`Remove ${participant.username}`}
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
