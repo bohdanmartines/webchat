@@ -18,9 +18,19 @@ GET {{baseUrl}}/api/chat/1
 Authorization: Bearer place_token_here
 
 ### Add user to a chat
-POST {{baseUrl}}/api/chat/1/user/3
+POST {{baseUrl}}/api/chat/1/user
 Authorization: Bearer place_token_here
+Content-Type: application/json
+
+{
+  "username": "user3"
+}
 
 ### Remove user from the chat
-DELETE {{baseUrl}}/api/chat/1/user/3
+DELETE {{baseUrl}}/api/chat/1/user
 Authorization: Bearer place_token_here
+Content-Type: application/json
+
+{
+  "username": "user3"
+}

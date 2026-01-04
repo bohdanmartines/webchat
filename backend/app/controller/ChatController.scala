@@ -1,9 +1,9 @@
 package controller
 
-import dto.ChatCreate
-import play.api.libs.json.Json
+import dto.{ChatCreate, ParticipantRequest}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
-import repository.ChatRepository
+import repository.{ChatRepository, UserRepository}
 import service.ChatService
 
 import javax.inject._
@@ -13,6 +13,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ChatController @Inject()(val controllerComponents: ControllerComponents,
                                chatService: ChatService,
                                chatRepository: ChatRepository,
+                               userRepository: UserRepository,
                                securedActionFactory: SecuredAction)
                               (implicit ec: ExecutionContext) extends BaseController {
 
@@ -43,19 +44,39 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
       .map { msgs => Ok(Json.toJson(msgs))}
   }
 
-  def addParticipant(chatId: Long, userId: Long): Action[AnyContent] = securedActionFactory.async { request =>
-    println(s"Adding user $userId to chat $chatId")
-    chatRepository.isChatOwner(chatId, request.userId).flatMap {
-      case true => chatService.addParticipant(chatId, userId).map { _ => Ok}
-      case false => Future.successful(Forbidden("You are not chat owner"))
-    }
+  def addParticipant(chatId: Long): Action[JsValue] = securedActionFactory.async(parse.json) { request =>
+    val participantRequest = request.body.validate[ParticipantRequest]
+    participantRequest.fold(
+      errors => Future.successful(BadRequest(errors.toString)),
+      pr => {
+        println(s"Adding user ${pr.username} to chat $chatId")
+        chatRepository.isChatOwner(chatId, request.userId).flatMap {
+          case false => Future.successful(Forbidden("You are not chat owner"))
+          case true =>
+            userRepository.findByUsername(pr.username).flatMap {
+              case None => Future.successful(BadRequest(Json.obj("error" -> s"User ${pr.username} not found")))
+              case Some(user) => chatService.addParticipant(chatId, user.id).map { _ => Ok}
+            }
+        }
+      }
+    )
   }
 
-  def removeParticipant(chatId: Long, userId: Long): Action[AnyContent] = securedActionFactory.async { request =>
-    println(s"Removing user $userId from chat $chatId")
-    chatRepository.isChatOwner(chatId, request.userId).flatMap {
-      case true => chatService.removeParticipant(chatId, userId).map { _ => Ok}
-      case false => Future.successful(Forbidden("You are not chat owner"))
-    }
+  def removeParticipant(chatId: Long): Action[JsValue] = securedActionFactory.async(parse.json) { request =>
+    val participantRequest = request.body.validate[ParticipantRequest]
+    participantRequest.fold(
+      errors => Future.successful(BadRequest(errors.toString)),
+      pr => {
+        println(s"Removing user ${pr.username} from chat $chatId")
+        chatRepository.isChatOwner(chatId, request.userId).flatMap {
+          case false => Future.successful(Forbidden("You are not chat owner"))
+          case true =>
+            userRepository.findByUsername(pr.username).flatMap {
+              case None => Future.successful(BadRequest(Json.obj("error" -> s"User ${pr.username} not found")))
+              case Some(user) => chatService.removeParticipant(chatId, user.id).map { _ => Ok}
+            }
+        }
+      }
+    )
   }
 }
