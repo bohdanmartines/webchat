@@ -51,3 +51,6 @@
 
 ## [v0.5.1] – Implement Web Socket automatic reconnection
 - Send heartbeat messages to the backend while the user keeps the chat open
+
+## [v1.0.0] – Complete the full chat flow
+- Implemented adding and removing users to/from chat
