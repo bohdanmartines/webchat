@@ -108,9 +108,11 @@ function ChatPage() {
       }
 
       webSocket.onerror = () => {
-        setError('WebSocket connection error')
-        setConnected(false)
-        console.log('WebSocket connection error');
+        if (wsRef.current === webSocket) {
+          setError('WebSocket connection error')
+          setConnected(false)
+          console.log('WebSocket connection error');
+        }
       }
 
       webSocket.onclose = () => {
