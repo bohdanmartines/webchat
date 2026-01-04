@@ -24,3 +24,10 @@ export async function addParticipant(chatId: number, username: string) {
   let response = await http.post('/chat/' + chatId + '/user', {username});
   return response.data;
 }
+
+export async function removeParticipant(chatId: number, username: string) {
+  let response = await http.delete(`/chat/${chatId}/user`, {
+    data: { username }
+  });
+  return response.data;
+}

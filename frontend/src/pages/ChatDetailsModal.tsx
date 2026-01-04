@@ -3,6 +3,7 @@ import {getChatDisplayName} from "../types/Chat.ts";
 import {useState} from "react";
 
 import * as chatApi from "../api/chat.ts";
+import {removeParticipant} from "../api/chat.ts";
 
 function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated}) {
 
@@ -43,9 +44,7 @@ function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated}) {
 
       const chatData = await chatApi.getChat(chat.id);
       onChatUpdated(chatData);
-
       setNewUsername('');
-      setError(null);
 
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to add participant');
@@ -53,8 +52,19 @@ function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated}) {
   }
 
   const handleRemoveParticipant = async (username: string) => {
-  // TODO Implement me
-    console.log('Remove participant ' + username);
+    console.log('Remove participant ' + username + ' from chat ' + chat.id);
+    setError(null);
+
+    try {
+      await chatApi.removeParticipant(chat.id, username);
+
+      const chatData = await chatApi.getChat(chat.id);
+      onChatUpdated(chatData);
+
+    } catch (err: any) {
+      console.error(err);
+      setError(err.response?.data?.error || 'Failed to remove participant');
+    }
   }
 
   if (!isOpen) return null;
