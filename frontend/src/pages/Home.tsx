@@ -1,15 +1,15 @@
 import {useEffect, useMemo, useState} from "react";
-import Navbar from "./Navbar.tsx";
 import * as chatApi from '../api/chat'
 import ChatList from "./ChatList.tsx";
 import {useAuth} from "../api/AuthContext.tsx";
 import '../css/HomePage.css';
 import CreateChatModal from "./CreateChatModal.tsx";
 import {useNavigate} from "react-router-dom";
+import type {Chat} from "../types/Chat.ts";
 
 function Home() {
 
-  const [chats, setChats] = useState([])
+  const [chats, setChats] = useState<Chat[]>([])
   const [searchQuery, setSearchQuery] = useState('')
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -30,7 +30,7 @@ function Home() {
 
     const query = searchQuery.toLowerCase();
     return chats.filter(chat =>
-      chat.name.toLowerCase().includes(query)
+      chat.name?.toLowerCase().includes(query)
     );
   }, [chats, searchQuery]);
 

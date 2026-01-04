@@ -1,11 +1,17 @@
 import '../css/ChatDetails.css';
-import {getChatDisplayName} from "../types/Chat.ts";
+import {type Chat, getChatDisplayName} from "../types/Chat.ts";
 import {useState} from "react";
 
 import * as chatApi from "../api/chat.ts";
-import {removeParticipant} from "../api/chat.ts";
 
-function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated}) {
+type ChatDetailsModalProps = {
+  chat: Chat;
+  isOpen: boolean;
+  onClose: () => void;
+  onChatUpdated: (chat: Chat) => void;
+};
+
+function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated} : ChatDetailsModalProps) {
 
   const [newUsername, setNewUsername] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +33,7 @@ function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated}) {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !loading) {
-      handleAddParticipant(newUsername.trim());
+      handleAddParticipant();
     }
   };
 
@@ -38,6 +44,7 @@ function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated}) {
     }
     console.log('Adding participant ' + newUsername + ' to chat ' + chat.id);
     setError(null);
+    setLoading(true);
 
     try {
       await chatApi.addParticipant(chat.id, newUsername);
@@ -48,12 +55,15 @@ function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated}) {
 
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to add participant');
+    } finally {
+      setLoading(false);
     }
   }
 
   const handleRemoveParticipant = async (username: string) => {
     console.log('Remove participant ' + username + ' from chat ' + chat.id);
     setError(null);
+    setLoading(true);
 
     try {
       await chatApi.removeParticipant(chat.id, username);
@@ -64,6 +74,8 @@ function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated}) {
     } catch (err: any) {
       console.error(err);
       setError(err.response?.data?.error || 'Failed to remove participant');
+    } finally {
+      setLoading(false);
     }
   }
 

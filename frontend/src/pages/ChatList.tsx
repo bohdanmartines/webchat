@@ -1,6 +1,12 @@
 import '../css/ChatList.css';
+import type {Chat} from "../types/Chat.ts";
 
-function ChatList({ chats, onChatClick }) {
+type ChatListProps = {
+  chats: Chat[];
+  onChatClick: (chatId: number) => void;
+};
+
+function ChatList({ chats, onChatClick } : ChatListProps) {
 
   if (chats.length === 0) {
     return (
@@ -15,7 +21,7 @@ function ChatList({ chats, onChatClick }) {
 
   return (
     <div className="chat-list">
-      {chats.map((chat) => (
+      {chats.map((chat: Chat) => (
         <div
           key={chat.id}
           className="chat-item"

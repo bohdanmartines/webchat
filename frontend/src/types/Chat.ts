@@ -6,6 +6,7 @@ export interface Chat {
   ownerId: number;
   ownerUsername: string;
   participants: User[];
+  participantCount: number;
 }
 
 export function getChatDisplayName(chat: Chat): string {

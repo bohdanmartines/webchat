@@ -10,7 +10,7 @@ import '../css/Chat.css';
 import type {Message} from "../types/Message.ts";
 import ChatDetailsModal from "./ChatDetailsModal.tsx";
 
-function Chat() {
+function ChatPage() {
 
   const [chat, setChat] = useState<Chat | null>(null);
   const [connected, setConnected] = useState(false);
@@ -107,13 +107,10 @@ function Chat() {
         }
       }
 
-      webSocket.onerror = (event) => {
-        if (event && event.data) {
-          const error = JSON.parse(event.data);
-          setError(error)
-          console.log('WebSocket error: ', error);
-        }
+      webSocket.onerror = () => {
+        setError('WebSocket connection error')
         setConnected(false)
+        console.log('WebSocket connection error');
       }
 
       webSocket.onclose = () => {
@@ -278,4 +275,4 @@ function Chat() {
   )
 }
 
-export default Chat
+export default ChatPage

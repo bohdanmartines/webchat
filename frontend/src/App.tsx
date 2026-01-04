@@ -1,14 +1,15 @@
 import './css/App.css'
 import {Navigate, Route, Routes} from "react-router-dom";
+import type { ReactNode } from 'react';
 
 import Register from './pages/Register'
 import Login from "./pages/Login.tsx";
 import Home from "./pages/Home.tsx";
 import {useAuth} from "./api/AuthContext.tsx";
-import Chat from "./pages/Chat.tsx";
+import ChatPage from "./pages/ChatPage.tsx";
 import Navbar from "./pages/Navbar.tsx";
 
-function ProtectedPage({children}: { children: JSX.Element }) {
+function ProtectedPage({children}: { children: ReactNode }) {
   const auth = useAuth()
   if (!auth.token) {
     return <Navigate to="/login" replace/>;
@@ -35,7 +36,7 @@ function App() {
       <Route path="/chat/:chatId"
              element={
                <ProtectedPage>
-                 <Chat/>
+                 <ChatPage/>
                </ProtectedPage>
              }/>
       <Route path="*" element={<Navigate to="/" replace/>}/>

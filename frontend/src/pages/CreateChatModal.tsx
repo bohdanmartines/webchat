@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import '../css/CreateChatModal.css';
+import type { MouseEvent } from 'react';
 
-function CreateChatModal({ isOpen, onClose, onSave }) {
+type CreateChatModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (name: string) => void;
+};
+
+function CreateChatModal({ isOpen, onClose, onSave }: CreateChatModalProps) {
 
   const [chatName, setChatName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +20,7 @@ function CreateChatModal({ isOpen, onClose, onSave }) {
     onClose();
   };
 
-  const handleBackdropClick = (e) => {
+  const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       handleClose();
     }
