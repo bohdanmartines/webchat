@@ -2,7 +2,9 @@ import '../css/ChatDetails.css';
 import {getChatDisplayName} from "../types/Chat.ts";
 import {useState} from "react";
 
-function ChatDetailsModal({chat, isOpen, onClose}) {
+import * as chatApi from "../api/chat.ts";
+
+function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated}) {
 
   const [newUsername, setNewUsername] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -10,9 +12,15 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
 
   const isCreator = chat.ownerUsername === localStorage.getItem('username');
 
+  const handleClose = () => {
+    setNewUsername('');
+    setError('');
+    onClose();
+  }
+
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      handleClose();
     }
   };
 
@@ -23,8 +31,25 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
   };
 
   const handleAddParticipant = async () => {
-    // TODO Implement me
-    console.log('Add participant ' + newUsername);
+    if (!newUsername.trim()) {
+      setError('Please enter a username');
+      return;
+    }
+    console.log('Adding participant ' + newUsername + ' to chat ' + chat.id);
+    setError(null);
+
+    try {
+      await chatApi.addParticipant(chat.id, newUsername);
+
+      const chatData = await chatApi.getChat(chatIdNumber);
+      onChatUpdated(chatData);
+
+      setNewUsername('');
+      setError(null);
+
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to add participant');
+    }
   }
 
   const handleRemoveParticipant = async (username: string) => {
@@ -39,7 +64,7 @@ function ChatDetailsModal({chat, isOpen, onClose}) {
       <div className="modal-content">
         <div className="modal-header">
           <span className="chat-title">{getChatDisplayName(chat)}</span>
-          <button className="modal-close" onClick={onClose} aria-label="Close">
+          <button className="modal-close" onClick={handleClose} aria-label="Close">
             ✕
           </button>
         </div>

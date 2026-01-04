@@ -19,3 +19,8 @@ export async function getMessages(chatId: number) {
   let response = await http.get('/chat/' + chatId + '/message');
   return response.data;
 }
+
+export async function addParticipant(chatId: number, username: string) {
+  let response = await http.post('/chat/' + chatId + '/user', {username});
+  return response.data;
+}

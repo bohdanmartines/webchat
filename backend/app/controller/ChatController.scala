@@ -54,7 +54,7 @@ class ChatController @Inject()(val controllerComponents: ControllerComponents,
           case false => Future.successful(Forbidden("You are not chat owner"))
           case true =>
             userRepository.findByUsername(pr.username).flatMap {
-              case None => Future.successful(BadRequest(Json.obj("error" -> s"User ${pr.username} not found")))
+              case None => Future.successful(BadRequest(Json.obj("error" -> "User not found")))
               case Some(user) => chatService.addParticipant(chatId, user.id).map { _ => Ok}
             }
         }

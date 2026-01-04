@@ -272,6 +272,7 @@ function Chat() {
         chat={chat}
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
+        onChatUpdated={(chat: Chat) => setChat(chat)}
       />
     </div>
   )
