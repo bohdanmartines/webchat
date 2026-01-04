@@ -13,5 +13,15 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
       - ./backend/sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  backend:
+    build: ./backend
+    depends_on:
+      - mysql
+    ports:
+      - "9000:9000"
+    environment:
+      - DB_HOST=mysql
+
 volumes:
   mysql-data:
