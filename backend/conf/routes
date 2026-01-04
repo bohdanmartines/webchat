@@ -8,7 +8,7 @@ POST        /api/chat                         controller.ChatController.createCh
 GET         /api/chat                         controller.ChatController.getChats()
 GET         /api/chat/:id                     controller.ChatController.getChat(id: Long)
 GET         /api/chat/:id/message             controller.ChatController.getMessages(id: Long)
-PUT         /api/chat/:id/user/:userId        controller.ChatController.addParticipant(id: Long, userId: Long)
+POST        /api/chat/:id/user/:userId        controller.ChatController.addParticipant(id: Long, userId: Long)
 DELETE      /api/chat/:id/user/:userId        controller.ChatController.removeParticipant(id: Long, userId: Long)
 
 # Websocket endpoints
