@@ -23,5 +23,12 @@ services:
     environment:
       - DB_HOST=mysql
 
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"  # React served via nginx
+
 volumes:
   mysql-data:
