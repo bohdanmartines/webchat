@@ -41,7 +41,7 @@ function ChatDetailsModal({chat, isOpen, onClose, onChatUpdated}) {
     try {
       await chatApi.addParticipant(chat.id, newUsername);
 
-      const chatData = await chatApi.getChat(chatIdNumber);
+      const chatData = await chatApi.getChat(chat.id);
       onChatUpdated(chatData);
 
       setNewUsername('');
