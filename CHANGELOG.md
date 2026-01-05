@@ -54,3 +54,7 @@
 
 ## [v1.0.0] – Complete the full chat flow
 - Implemented adding and removing users to/from chat
+
+## [v1.0.1] – Dockerized the application and minor fixes
+- Dockerized backend and frontend
+- Fixed websocket connectivity in dev mode
